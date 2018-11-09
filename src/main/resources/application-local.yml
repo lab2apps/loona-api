@@ -3,3 +3,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/example?charSet=UTF8
     driver-class-name: org.postgresql.Driver
     name: postgres
+  jpa:
+    properties.hibernate.show_sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
