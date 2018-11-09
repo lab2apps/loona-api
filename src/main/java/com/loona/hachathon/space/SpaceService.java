@@ -1,10 +1,9 @@
 package com.loona.hachathon.space;
 
-import com.loona.hachathon.exception.ResourceNotFound;
+import com.loona.hachathon.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -20,7 +19,7 @@ public class SpaceService {
     public Space getSpace(String spaceId) {
         Space space = spaceRepository.findSpaceByUuid(spaceId);
         if (space == null)
-            throw new ResourceNotFound();
+            throw new ResourceNotFoundException();
         else
             return space;
 
@@ -29,7 +28,7 @@ public class SpaceService {
     public void updateSpace(String spaceId, Space updatedSpace) {
         Space space = spaceRepository.findSpaceByUuid(spaceId);
         if (space == null) {
-            throw new ResourceNotFound();
+            throw new ResourceNotFoundException();
         } else {
             spaceRepository.save(SpaceConverter.merge(space, updatedSpace));
         }
@@ -42,7 +41,7 @@ public class SpaceService {
     public void deleteSpace(String spaceId) {
         Space space = spaceRepository.findSpaceByUuid(spaceId);
         if (space == null) {
-            throw new ResourceNotFound();
+            throw new ResourceNotFoundException();
         } else {
             spaceRepository.deleteById(spaceId);
         }

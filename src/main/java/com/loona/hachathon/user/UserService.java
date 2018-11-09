@@ -30,4 +30,8 @@ public class UserService {
             }
         }
     }
+
+    public boolean isUserExist(String userId) {
+        return userRepository.existsById(userId);
+    }
 }

@@ -2,7 +2,7 @@ package com.loona.hachathon.image;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
-import com.loona.hachathon.exception.ResourceNotFound;
+import com.loona.hachathon.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -15,8 +15,6 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ImageService {
@@ -42,7 +40,7 @@ public class ImageService {
                 Files.copy(image.getInputStream(), this.rootLocation.resolve(imageUrl));
                 return imageUrl;
         } catch (IOException e) {
-            throw new ResourceNotFound(); //TODO Replace
+            throw new ResourceNotFoundException(); //TODO Replace
         }
     }
 
@@ -52,9 +50,9 @@ public class ImageService {
             Resource resource = new UrlResource(file.toUri());
             if(resource.exists() || resource.isReadable()) {
                 return resource;
-            } else throw new ResourceNotFound();
+            } else throw new ResourceNotFoundException();
         } catch (MalformedURLException e) {
-            throw new ResourceNotFound();
+            throw new ResourceNotFoundException();
         }
     }
 

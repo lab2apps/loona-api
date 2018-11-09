@@ -1,6 +1,6 @@
 package com.loona.hachathon.room;
 
-import com.loona.hachathon.exception.ResourceNotFound;
+import com.loona.hachathon.exception.ResourceNotFoundException;
 import com.loona.hachathon.space.Space;
 import com.loona.hachathon.space.SpaceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class RoomService {
     public Room getRoom(String roomId) {
         Room room = roomRepository.findRoomByUuid(roomId);
         if (room == null) {
-            throw new ResourceNotFound();
+            throw new ResourceNotFoundException();
         } else {
             return room;
         }
@@ -40,7 +40,7 @@ public class RoomService {
     public void updateRoom(String roomId, RoomDto roomDto) {
         Room originRoom = roomRepository.findRoomByUuid(roomId);
         if (originRoom == null) {
-            throw new ResourceNotFound();
+            throw new ResourceNotFoundException();
         } else {
             Room updatedRoom = RoomConverter.convert(roomDto);
             roomRepository.save(RoomConverter.merge(originRoom, updatedRoom));
@@ -50,7 +50,7 @@ public class RoomService {
     public void deleteRoom(String roomId) {
         Room room = roomRepository.findRoomByUuid(roomId);
         if (room == null) {
-            throw  new ResourceNotFound();
+            throw  new ResourceNotFoundException();
         } else {
             roomRepository.deleteById(roomId);
         }

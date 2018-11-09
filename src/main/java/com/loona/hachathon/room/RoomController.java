@@ -6,33 +6,33 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/rooms")
+@RequestMapping(value = "/api", produces = "application/json")
 public class RoomController {
 
     @Autowired
     private RoomService roomService;
 
-    @GetMapping
+    @GetMapping("/rooms")
     public List<Room> getRooms() {
         return roomService.getRooms();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/room/{id}")
     public Room getRoom(@PathVariable(value = "id", required = false) String id) {
         return roomService.getRoom(id);
     }
 
-    @PostMapping
+    @PostMapping("/room")
     public void createRoom(@RequestBody RoomDto roomDto) {
         roomService.createRoom(roomDto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/room/{id}")
     public void updateRooms(@PathVariable(value = "id") String id, @RequestBody RoomDto roomDto) {
         roomService.updateRoom(id, roomDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/room/{id}")
     public void deleteRoom(@PathVariable(value = "id") String id) {
         roomService.deleteRoom(id);
     }
