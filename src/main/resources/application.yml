@@ -1,0 +1,5 @@
+spring:
+  jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/example?charSet=UTF8}
+    driver-class-name: org.postgresql.Driver
