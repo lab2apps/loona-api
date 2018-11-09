@@ -13,22 +13,23 @@ public class SpaceService {
     @Autowired
     private SpaceRepository spaceRepository;
 
-    public List<Space> getSpaces(String spaceId) {
-        if (spaceId == null) {
-            return spaceRepository.findAll();
-        } else {
-            Space space = spaceRepository.findSpaceByUuid(spaceId);
-            if (space == null)
-                throw new ResourceNotFound();
-            else
-                 return Collections.singletonList(space);
-        }
+    public List<Space> getSpaces() {
+        return spaceRepository.findAll();
+    }
+
+    public Space getSpace(String spaceId) {
+        Space space = spaceRepository.findSpaceByUuid(spaceId);
+        if (space == null)
+            throw new ResourceNotFound();
+        else
+            return space;
+
     }
 
     public void updateSpace(String spaceId, Space updatedSpace) {
         Space space = spaceRepository.findSpaceByUuid(spaceId);
         if (space == null) {
-            throw  new ResourceNotFound();
+            throw new ResourceNotFound();
         } else {
             spaceRepository.save(SpaceConverter.merge(space, updatedSpace));
         }
@@ -41,7 +42,7 @@ public class SpaceService {
     public void deleteSpace(String spaceId) {
         Space space = spaceRepository.findSpaceByUuid(spaceId);
         if (space == null) {
-            throw  new ResourceNotFound();
+            throw new ResourceNotFound();
         } else {
             spaceRepository.deleteById(spaceId);
         }

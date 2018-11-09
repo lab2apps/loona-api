@@ -1,57 +1,33 @@
 package com.loona.hachathon.room;
 
-import com.loona.hachathon.space.Space;
-import com.loona.hachathon.util.CsvAttributeConverter;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "room")
-public class Room {
+public class RoomDto {
 
-    @Id
-    @GeneratedValue(generator = "uuid")
-    @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "uuid", unique = true)
-    private String uuid;
+    private String spaceId;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "image_urls")
-    @Convert(converter = CsvAttributeConverter.class)
     private List<String> imageUrls;
 
-    @Column(name = "room_type")
     private String roomType;
 
-    @Column(name = "rent_type")
     private String rentType;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "price")
     private int price;
 
-    @Column(name = "start_work_time")
     private int startWorkTime;
 
-    @Column(name = "end_work_time")
     private int endWorkTime;
 
-    @ManyToOne
-    @JoinColumn(name="space_uuid")
-    private Space roomSpace;
-
-    public String getUuid() {
-        return uuid;
+    public String getSpaceId() {
+        return spaceId;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setSpaceId(String spaceId) {
+        this.spaceId = spaceId;
     }
 
     public String getName() {
@@ -100,14 +76,6 @@ public class Room {
 
     public void setPrice(int price) {
         this.price = price;
-    }
-
-    public Space getRoomSpace() {
-        return roomSpace;
-    }
-
-    public void setRoomSpace(Space roomSpace) {
-        this.roomSpace = roomSpace;
     }
 
     public int getStartWorkTime() {

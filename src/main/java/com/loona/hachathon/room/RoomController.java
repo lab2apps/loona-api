@@ -5,25 +5,31 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/rooms")
+@RestController
+@RequestMapping("/rooms")
 public class RoomController {
 
     @Autowired
     private RoomService roomService;
 
+    @GetMapping
+    public List<Room> getRooms() {
+        return roomService.getRooms();
+    }
+
     @GetMapping("/{id}")
-    public List<Room> getRooms(@PathVariable(value = "id", required = false) String id) {
-        return roomService.getRooms(id);
+    public Room getRoom(@PathVariable(value = "id", required = false) String id) {
+        return roomService.getRoom(id);
     }
 
     @PostMapping
-    public void createRoom() {
-
+    public void createRoom(@RequestBody RoomDto roomDto) {
+        roomService.createRoom(roomDto);
     }
 
     @PutMapping("/{id}")
-    public List<Room> updateRooms(@PathVariable(value = "id") String id) {
-        return roomService.getRooms(id);
+    public void updateRooms(@PathVariable(value = "id") String id, @RequestBody RoomDto roomDto) {
+        roomService.updateRoom(id, roomDto);
     }
 
     @DeleteMapping("/{id}")

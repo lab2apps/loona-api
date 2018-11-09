@@ -49,7 +49,7 @@ public class Space {
     @Column(name = "end_work_time")
     private int endWorkTime;
 
-    @OneToMany(fetch=FetchType.EAGER, mappedBy = "room")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "roomSpace")
     private List<Room> rooms;
 
     public String getUuid() {

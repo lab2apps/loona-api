@@ -5,15 +5,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/spaces")
+@RestController
+@RequestMapping("/spaces")
 public class SpaceController {
 
     @Autowired
     private SpaceService spaceService;
 
+    @GetMapping
+    public List<Space> getSpaces() {
+        return spaceService.getSpaces();
+    }
+
     @GetMapping("/{id}")
-    public List<Space> getSpaces(@PathVariable(value = "id", required = false) String id) {
-        return spaceService.getSpaces(id);
+    public Space getSpaces(@PathVariable(value = "id", required = false) String id) {
+        return spaceService.getSpace(id);
     }
 
     @PostMapping
