@@ -4,5 +4,7 @@ spring:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/example?charSet=UTF8}
     driver-class-name: org.postgresql.Driver
 application:
+  id: 6745176
+  secret: LQFLwAm8zjBzDaQA9MbC
   storage:
     location: images

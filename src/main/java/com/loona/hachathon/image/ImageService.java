@@ -48,7 +48,7 @@ public class ImageService {
 
     public Resource loadImage(String filename) {
         try {
-            Path file = rootLocation.resolve(filename);;
+            Path file = rootLocation.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
             if(resource.exists() || resource.isReadable()) {
                 return resource;
