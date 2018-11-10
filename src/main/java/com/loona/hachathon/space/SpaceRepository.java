@@ -12,5 +12,5 @@ public interface SpaceRepository extends JpaRepository<Space, String> {
     Space findSpaceByUuid(String uuid);
     Space findSpaceByUuidAndVkUser(String uuid, User vkUser);
     List<Space> findByVkUser(User vkUser);
-    List<Space> findByNameLike(String name);
+    List<Space> findByNameContaining(String name);
 }

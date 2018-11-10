@@ -29,7 +29,7 @@ public class SpaceSearchService {
             return result;
         }
 
-        List<Space> foundSpaces = spaceRepository.findByNameLike(spaceName);
+        List<Space> foundSpaces = spaceRepository.findByNameContaining(spaceName);
 
         List<SpaceResponseDto> result = new ArrayList<>();
 
