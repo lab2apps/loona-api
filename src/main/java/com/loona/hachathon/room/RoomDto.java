@@ -5,6 +5,8 @@ import java.util.Set;
 
 public class RoomDto {
 
+    private String uuid;
+
     private String spaceId;
 
     private String name;
@@ -17,7 +19,7 @@ public class RoomDto {
 
     private String floor;
 
-    private String footage;
+    private int footage;
 
     private String rentType;
 
@@ -26,6 +28,14 @@ public class RoomDto {
     private String bookingType;
 
     private Set<String> options;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
     public String getSpaceId() {
         return spaceId;
@@ -75,11 +85,11 @@ public class RoomDto {
         this.floor = floor;
     }
 
-    public String getFootage() {
+    public int getFootage() {
         return footage;
     }
 
-    public void setFootage(String footage) {
+    public void setFootage(int footage) {
         this.footage = footage;
     }
 

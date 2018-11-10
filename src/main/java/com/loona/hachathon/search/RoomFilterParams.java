@@ -1,53 +1,35 @@
 package com.loona.hachathon.search;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 public class RoomFilterParams {
 
-    private LocalDateTime startWorkTime;
-    private LocalDateTime endWorkTime;
-
     private String roomType;
-
-    private String rentType;
-
-    private String name;
 
     private Integer minPrice;
     private Integer maxPrice;
+    private String rentType;
+
+    private Integer minFootage;
+    private Integer maxFootage;
+
+    private List<String> options;
 
     private Integer page;
     private Integer pageSize;
 
-    public RoomFilterParams(LocalDateTime startWorkTime, LocalDateTime endWorkTime,
-                            String roomType, String rentType, String name,
-                            Integer minPrice, Integer maxPrice,
+    public RoomFilterParams(String roomType, Integer minPrice, Integer maxPrice, String rentType,
+                            Integer minFootage, Integer maxFootage, List<String> options,
                             Integer page, Integer pageSize) {
-        this.startWorkTime = startWorkTime;
-        this.endWorkTime = endWorkTime;
         this.roomType = roomType;
-        this.rentType = rentType;
-        this.name = name;
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
+        this.rentType = rentType;
+        this.minFootage = minFootage;
+        this.maxFootage = maxFootage;
+        this.options = options;
         this.page = page;
         this.pageSize = pageSize;
-    }
-
-    public LocalDateTime getStartWorkTime() {
-        return startWorkTime;
-    }
-
-    public void setStartWorkTime(LocalDateTime startWorkTime) {
-        this.startWorkTime = startWorkTime;
-    }
-
-    public LocalDateTime getEndWorkTime() {
-        return endWorkTime;
-    }
-
-    public void setEndWorkTime(LocalDateTime endWorkTime) {
-        this.endWorkTime = endWorkTime;
     }
 
     public String getRoomType() {
@@ -56,22 +38,6 @@ public class RoomFilterParams {
 
     public void setRoomType(String roomType) {
         this.roomType = roomType;
-    }
-
-    public String getRentType() {
-        return rentType;
-    }
-
-    public void setRentType(String rentType) {
-        this.rentType = rentType;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Integer getMinPrice() {
@@ -88,6 +54,38 @@ public class RoomFilterParams {
 
     public void setMaxPrice(Integer maxPrice) {
         this.maxPrice = maxPrice;
+    }
+
+    public String getRentType() {
+        return rentType;
+    }
+
+    public void setRentType(String rentType) {
+        this.rentType = rentType;
+    }
+
+    public Integer getMinFootage() {
+        return minFootage;
+    }
+
+    public void setMinFootage(Integer minFootage) {
+        this.minFootage = minFootage;
+    }
+
+    public Integer getMaxFootage() {
+        return maxFootage;
+    }
+
+    public void setMaxFootage(Integer maxFootage) {
+        this.maxFootage = maxFootage;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<String> options) {
+        this.options = options;
     }
 
     public Integer getPage() {

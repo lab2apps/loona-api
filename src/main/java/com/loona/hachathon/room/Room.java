@@ -8,7 +8,6 @@ import com.loona.hachathon.util.CsvAttributeConverter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +39,7 @@ public class Room {
     private String floor;
 
     @Column(name = "footage")
-    private String footage;
+    private int footage;
 
     @Column(name = "rent_type", nullable = false)
     private String rentType;
@@ -114,11 +113,11 @@ public class Room {
         this.floor = floor;
     }
 
-    public String getFootage() {
+    public int getFootage() {
         return footage;
     }
 
-    public void setFootage(String footage) {
+    public void setFootage(int footage) {
         this.footage = footage;
     }
 

@@ -1,6 +1,6 @@
 package com.loona.hachathon.search;
 
-import com.loona.hachathon.room.Room;
+import com.loona.hachathon.room.RoomDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class RoomSearchService {
     private RoomSearchRepository roomSearchRepository;
 
     public RoomSearchResultDto search(RoomFilterParams roomFilterParams) {
-        List<Room> foundRooms = roomSearchRepository.search(roomFilterParams);
+        List<RoomDto> foundRooms = roomSearchRepository.search(roomFilterParams);
 
         if (foundRooms.isEmpty()) return new RoomSearchResultDto(0, 0, Collections.emptyList());
 

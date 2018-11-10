@@ -1,6 +1,6 @@
 package com.loona.hachathon.search;
 
-import com.loona.hachathon.room.Room;
+import com.loona.hachathon.room.RoomDto;
 
 import java.util.List;
 
@@ -8,9 +8,9 @@ public class RoomSearchResultDto {
 
     private long totalCount;
     private int count;
-    private List<Room> rooms;
+    private List<RoomDto> rooms;
 
-    public RoomSearchResultDto(long totalCount, int count, List<Room> rooms) {
+    public RoomSearchResultDto(long totalCount, int count, List<RoomDto> rooms) {
         this.totalCount = totalCount;
         this.count = count;
         this.rooms = rooms;
@@ -32,11 +32,11 @@ public class RoomSearchResultDto {
         this.count = count;
     }
 
-    public List<Room> getRooms() {
+    public List<RoomDto> getRooms() {
         return rooms;
     }
 
-    public void setRooms(List<Room> rooms) {
+    public void setRooms(List<RoomDto> rooms) {
         this.rooms = rooms;
     }
 }

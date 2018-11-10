@@ -1,15 +1,16 @@
 package com.loona.hachathon.search;
 
-import com.loona.hachathon.room.Room;
+import com.loona.hachathon.room.RoomDto;
+import com.loona.hachathon.util.CsvAttributeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -19,8 +20,9 @@ public class RoomSearchRepository {
     private NamedParameterJdbcOperations jdbcOps;
 
     private static final RoomSearchResultMapper roomSearchResultMapper = new RoomSearchResultMapper();
+    private static final CsvAttributeConverter csvAttributeConverter = new CsvAttributeConverter();
 
-    public List<Room> search(RoomFilterParams roomFilterParams) {
+    public List<RoomDto> search(RoomFilterParams roomFilterParams) {
         MapSqlParameterSource parameterSource = getSqlParametersFromFilter(roomFilterParams);
 
         // Additional page parameters
@@ -29,22 +31,17 @@ public class RoomSearchRepository {
 
         StringBuilder sqlStringBuilder = new StringBuilder();
         sqlStringBuilder.append("SELECT * FROM room ")
-                .append("WHERE start_work_time >= :startWorkTime AND end_work_time <= :endWorkTime ");
+                .append("WHERE room_type = :roomType ")
+                .append("AND rent_type = :rentType ")
+                .append("AND price >= :minPrice AND price <= :maxPrice ")
+                .append("AND footage >= :minFootage AND footage <= :maxFootage ");
 
-        if (!roomFilterParams.getRoomType().isEmpty()) {
-            sqlStringBuilder.append("AND room_type = :roomType ");
+        List<String> options = roomFilterParams.getOptions();
+        if (!CollectionUtils.isEmpty(options)) {
+            sqlStringBuilder.append("AND ARRAY[ :options ]::TEXT[] <@ regexp_split_to_array(options, ',') ");
         }
 
-        if (!roomFilterParams.getRentType().isEmpty()) {
-            sqlStringBuilder.append("AND rent_type = :rentType ");
-        }
-
-        if (!roomFilterParams.getName().isEmpty()) {
-            sqlStringBuilder.append("AND name = :name ");
-        }
-
-        sqlStringBuilder.append("AND price >= :minPrice AND price <= :maxPrice ")
-                .append("OFFSET :offset LIMIT :limit");
+        sqlStringBuilder.append("OFFSET :offset LIMIT :limit");
 
         return jdbcOps.query(sqlStringBuilder.toString(), parameterSource, roomSearchResultMapper);
     }
@@ -53,22 +50,16 @@ public class RoomSearchRepository {
         MapSqlParameterSource parameterSource = getSqlParametersFromFilter(roomFilterParams);
 
         StringBuilder sqlStringBuilder = new StringBuilder();
-        sqlStringBuilder.append("SELECT count(*) FROM room ")
-                .append("WHERE start_work_time >= :startWorkTime AND end_work_time <= :endWorkTime ");
+        sqlStringBuilder.append("SELECT count(1) FROM room ")
+                .append("WHERE room_type = :roomType ")
+                .append("AND rent_type = :rentType ")
+                .append("AND price >= :minPrice AND price <= :maxPrice ")
+                .append("AND footage >= :minFootage AND footage <= :maxFootage ");
 
-        if (!roomFilterParams.getRoomType().isEmpty()) {
-            sqlStringBuilder.append("AND room_type = :roomType ");
+        List<String> options = roomFilterParams.getOptions();
+        if (!CollectionUtils.isEmpty(options)) {
+            sqlStringBuilder.append("AND ARRAY[ :options ]::TEXT[] <@ regexp_split_to_array(options, ',')");
         }
-
-        if (!roomFilterParams.getRentType().isEmpty()) {
-            sqlStringBuilder.append("AND rent_type = :rentType ");
-        }
-
-        if (!roomFilterParams.getName().isEmpty()) {
-            sqlStringBuilder.append("AND name = :name ");
-        }
-
-        sqlStringBuilder.append("AND price >= :minPrice AND price <= :maxPrice ");
 
         Long result = jdbcOps.queryForObject(sqlStringBuilder.toString(), parameterSource, Long.class);
 
@@ -81,50 +72,50 @@ public class RoomSearchRepository {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
 
         // Required
-        LocalDateTime startWorkTime = roomFilterParams.getStartWorkTime();
-        LocalDateTime endWorkTime = roomFilterParams.getEndWorkTime();
-
-        parameterSource.addValue("startWorkTime", startWorkTime);
-        parameterSource.addValue("endWorkTime", endWorkTime);
+        String roomType = roomFilterParams.getRoomType();
+        parameterSource.addValue("roomType", roomType);
 
         // Optional
-        String roomType = roomFilterParams.getRoomType();
-        if (!roomType.isEmpty()) {
-            parameterSource.addValue("roomType", roomType);
-        }
-
-        String rentType = roomFilterParams.getRentType();
-        if (!rentType.isEmpty()) {
-            parameterSource.addValue("rentType", rentType);
-        }
-
-        String name = roomFilterParams.getName();
-        if (!name.isEmpty()) {
-            parameterSource.addValue("name", name);
-        }
-
         Integer minPrice = roomFilterParams.getMinPrice();
         Integer maxPrice = roomFilterParams.getMaxPrice();
-
         parameterSource.addValue("minPrice", minPrice);
         parameterSource.addValue("maxPrice", maxPrice);
+
+        String rentType = roomFilterParams.getRentType();
+        parameterSource.addValue("rentType", rentType);
+
+        Integer minFootage = roomFilterParams.getMinFootage();
+        Integer maxFootage = roomFilterParams.getMaxFootage();
+        parameterSource.addValue("minFootage", minFootage);
+        parameterSource.addValue("maxFootage", maxFootage);
+
+        List<String> options = roomFilterParams.getOptions();
+        if (!CollectionUtils.isEmpty(options)) {
+            parameterSource.addValue("options", options);
+        }
 
         return parameterSource;
     }
 
-    private static class RoomSearchResultMapper implements RowMapper<Room> {
+    private static class RoomSearchResultMapper implements RowMapper<RoomDto> {
 
         @Override
-        public Room mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Room room = new Room();
+        public RoomDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+            RoomDto room = new RoomDto();
 
             room.setUuid(rs.getString(1));
-            room.setDescription(rs.getString(2));
-            room.setImageUrls(rs.getString(4));
-            room.setName(rs.getString(5));
-            room.setPrice(rs.getInt(6));
-            room.setRentType(rs.getString(7));
-            room.setRoomType(rs.getString(8));
+            room.setBookingType(rs.getString(2));
+            room.setDescription(rs.getString(3));
+            room.setFloor(rs.getString(4));
+            room.setFootage(rs.getInt(5));
+            room.setImageUrls(rs.getString(6));
+            room.setName(rs.getString(7));
+            room.setOptions(csvAttributeConverter.convertToEntityAttribute(rs.getString(8)));
+            room.setPrice(rs.getInt(9));
+            room.setRentType(rs.getString(10));
+            room.setRoomType(rs.getString(11));
+            room.setWay(rs.getString(12));
+            room.setSpaceId(rs.getString(13));
 
             return room;
         }
