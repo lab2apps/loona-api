@@ -10,7 +10,7 @@ public class UserConvertor {
         user.setSex(userDto.getSex());
         user.setCity(userDto.getCity());
         user.setCountry(userDto.getCountry());
-        user.setSignedId(userDto.getSignedId());
+        user.setSignedId(userDto.getSignedUserId());
         return user;
     }
 }

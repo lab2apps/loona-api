@@ -8,7 +8,7 @@ public class UserDto {
     private String sex;
     private String city;
     private String country;
-    private String signedId;
+    private String signedUserId;
 
     public String getId() {
         return id;
@@ -58,11 +58,11 @@ public class UserDto {
         this.country = country;
     }
 
-    public String getSignedId() {
-        return signedId;
+    public String getSignedUserId() {
+        return signedUserId;
     }
 
-    public void setSignedId(String signedId) {
-        this.signedId = signedId;
+    public void setSignedUserId(String signedUserId) {
+        this.signedUserId = signedUserId;
     }
 }
