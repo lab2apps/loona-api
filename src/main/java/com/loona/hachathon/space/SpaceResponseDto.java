@@ -1,6 +1,7 @@
 package com.loona.hachathon.space;
 
 import java.util.List;
+import java.util.Set;
 
 public class SpaceResponseDto {
 
@@ -12,7 +13,7 @@ public class SpaceResponseDto {
     private String address;
     private String phone;
     private String vkLink;
-    private List<String> workDays;
+    private Set<String> workDays;
     private String startWorkTime;
     private String endWorkTime;
     private boolean mySpace;
@@ -81,11 +82,11 @@ public class SpaceResponseDto {
         this.vkLink = vkLink;
     }
 
-    public List<String> getWorkDays() {
+    public Set<String> getWorkDays() {
         return workDays;
     }
 
-    public void setWorkDays(List<String> workDays) {
+    public void setWorkDays(Set<String> workDays) {
         this.workDays = workDays;
     }
 

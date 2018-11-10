@@ -2,8 +2,10 @@ package com.loona.hachathon.space;
 
 import com.loona.hachathon.exception.BadRequestException;
 import com.loona.hachathon.exception.ResourceNotFoundException;
+import com.loona.hachathon.order.OrderService;
 import com.loona.hachathon.user.User;
 import com.loona.hachathon.user.UserService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class SpaceService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private OrderService orderService;
+
     public List<SpaceResponseDto> getSpaces() {
         String currentUserId = getCurrentUserId();
         List<SpaceResponseDto> spaceDto = new ArrayList<>();
@@ -29,13 +34,22 @@ public class SpaceService {
         return spaceDto;
     }
 
-    public SpaceResponseDto getSpace(String spaceId) {
+    public SpaceResponseDto getSpaceDto(String spaceId) {
         String currentUserId = getCurrentUserId();
         Space space = spaceRepository.findSpaceByUuid(spaceId);
         if (space == null)
             throw new ResourceNotFoundException();
         else
             return SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId));
+
+    }
+
+    public Space getSpace(String spaceId) {
+        Space space = spaceRepository.findSpaceByUuid(spaceId);
+        if (space == null)
+            throw new ResourceNotFoundException();
+        else
+            return space;
 
     }
 

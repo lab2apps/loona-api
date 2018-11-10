@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "space")
@@ -45,7 +46,7 @@ public class Space {
 
     @Column(name = "work_days")
     @Convert(converter = CsvAttributeConverter.class)
-    private List<String> workDays;
+    private Set<String> workDays;
 
     @Column(name = "start_work_time")
     private String startWorkTime;
@@ -125,11 +126,11 @@ public class Space {
         this.vkLink = vkLink;
     }
 
-    public List<String> getWorkDays() {
+    public Set<String> getWorkDays() {
         return workDays;
     }
 
-    public void setWorkDays(List<String> workDays) {
+    public void setWorkDays(Set<String> workDays) {
         this.workDays = workDays;
     }
 

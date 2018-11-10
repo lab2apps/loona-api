@@ -1,5 +1,9 @@
 spring:
   jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/example?charSet=UTF8}
     driver-class-name: org.postgresql.Driver
@@ -9,6 +13,7 @@ spring:
     hibernate:
       ddl-auto: update
 application:
+  groupId: 173753932
   id: 6745176
   secret: LQFLwAm8zjBzDaQA9MbC
   storage:

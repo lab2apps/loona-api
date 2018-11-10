@@ -6,6 +6,7 @@ import com.loona.hachathon.room.RoomService;
 import com.loona.hachathon.user.User;
 import com.loona.hachathon.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,9 @@ import java.util.List;
 
 @Service
 public class OrderService {
+
+    @Value("${application.groupId}")
+    private int groupId;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -23,7 +27,9 @@ public class OrderService {
     @Autowired
     private RoomService roomService;
 
-    public void createOrder(OrderRequestDto orderDto) {
+    // 1 Верефицируется 2 Подтвержден 3 Откланен
+    //Rent type HOUR DAY
+    public OrderVerifiedDto createOrder(OrderRequestDto orderDto) {
         String currentUserId = getCurrentUserId();
         User currentUser = userService.getUserById(currentUserId);
         Room room = roomService.getRoom(orderDto.getRoomId());
@@ -34,11 +40,23 @@ public class OrderService {
             } else {
                 rentTime = orderDto.getEndRentTime().getDayOfYear() - orderDto.getStartRentTime().getDayOfYear();
             }
+            int price = rentTime * room.getPrice();
             Order order = new Order();
+            order.setRentTime(rentTime);
             order.setStartRentTime(orderDto.getStartRentTime());
             order.setEndRentTime(orderDto.getEndRentTime());
-            order.setRentTime(rentTime);
-//            order.setPrice(rentTime * room.getPrice());
+            order.setPrice(price);
+            order.setStatus(1);
+            order.setVkUser(currentUser);
+            order.setOrderedRoom(room);
+            orderRepository.save(order);
+
+            userService.addSpacesToFavorite(room.getRoomSpace().getUuid());
+
+            OrderVerifiedDto dto = new OrderVerifiedDto();
+            dto.setPrice(price);
+            dto.setReceiverId(groupId);
+            return dto;
         } else {
             throw new BadRequestException();
         }

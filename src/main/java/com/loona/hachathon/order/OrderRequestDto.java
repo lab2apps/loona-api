@@ -1,6 +1,5 @@
 package com.loona.hachathon.order;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 public class OrderRequestDto {

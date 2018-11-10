@@ -1,5 +1,6 @@
 package com.loona.hachathon.space;
 
+import com.loona.hachathon.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,9 @@ public class SpaceController {
 
     @Autowired
     private SpaceService spaceService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/spaces")
     public List<SpaceResponseDto> getSpaces() {
@@ -24,7 +28,7 @@ public class SpaceController {
 
     @GetMapping("/space/{id}")
     public SpaceResponseDto getSpaces(@PathVariable(value = "id", required = false) String id) {
-        return spaceService.getSpace(id);
+        return spaceService.getSpaceDto(id);
     }
 
     @PostMapping("/space")
@@ -40,5 +44,16 @@ public class SpaceController {
     @DeleteMapping("/space/{id}")
     public void deleteSpace(@PathVariable("id") String id) {
         spaceService.deleteSpace(id);
+    }
+
+
+    @GetMapping("/space/{id}/favorite")
+    public void addSpacesToFavorite(@PathVariable(value = "id", required = false) String id) {
+        userService.addSpacesToFavorite(id);
+    }
+
+    @DeleteMapping("/space/{id}/favorite")
+    public void deleteSpacesFromFavorite(@PathVariable("id") String id) {
+        userService.deleteSpacesFromFavorite(id);
     }
 }

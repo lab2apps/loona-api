@@ -13,8 +13,8 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/order")
-    public void createOrder(@RequestBody OrderRequestDto orderDto) {
-
+    public OrderVerifiedDto createOrder(@RequestBody OrderRequestDto orderDto) {
+        return orderService.createOrder(orderDto);
     }
 
     @GetMapping("/order")

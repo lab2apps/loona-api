@@ -8,7 +8,6 @@ public class RoomConverter {
         room.setRoomType(roomDto.getRoomType());
         room.setImageUrls(roomDto.getImageUrls());
         room.setDescription(roomDto.getDescription());
-        room.setWay(roomDto.getWay());
         room.setFloor(roomDto.getFloor());
         room.setFootage(roomDto.getFootage());
         room.setRentType(roomDto.getRentType());
@@ -23,7 +22,6 @@ public class RoomConverter {
         originRoom.setRoomType(updatedRoom.getRoomType());
         originRoom.setImageUrls(updatedRoom.getImageUrls());
         originRoom.setDescription(updatedRoom.getDescription());
-        originRoom.setWay(updatedRoom.getWay());
         originRoom.setFloor(updatedRoom.getFloor());
         originRoom.setFootage(updatedRoom.getFootage());
         originRoom.setRentType(updatedRoom.getRentType());

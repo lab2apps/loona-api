@@ -35,9 +35,6 @@ public class Room {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "way")
-    private String way;
-
     @Column(name = "floor")
     private String floor;
 
@@ -54,8 +51,7 @@ public class Room {
     private String bookingType;
 
     @Column(name = "options")
-    @Convert(converter = CsvAttributeConverter.class)
-    private List<String> options;
+    private String options;
 
     @ManyToOne
     @JoinColumn(name="space_uuid")
@@ -108,14 +104,6 @@ public class Room {
         this.description = description;
     }
 
-    public String getWay() {
-        return way;
-    }
-
-    public void setWay(String way) {
-        this.way = way;
-    }
-
     public String getFloor() {
         return floor;
     }
@@ -156,11 +144,11 @@ public class Room {
         this.bookingType = bookingType;
     }
 
-    public List<String> getOptions() {
+    public String getOptions() {
         return options;
     }
 
-    public void setOptions(List<String> options) {
+    public void setOptions(String options) {
         this.options = options;
     }
 

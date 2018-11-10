@@ -1,22 +1,20 @@
 package com.loona.hachathon.util;
 
 import javax.persistence.AttributeConverter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-public class CsvAttributeConverter implements AttributeConverter<List<String>, String> {
+public class CsvAttributeConverter implements AttributeConverter<Set<String>, String> {
     @Override
-    public String convertToDatabaseColumn(List<String> attribute) {
+    public String convertToDatabaseColumn(Set<String> attribute) {
         if (attribute == null) {
             return null;
         } else return String.join(",", attribute);
     }
 
     @Override
-    public List<String> convertToEntityAttribute(String dbData) {
+    public Set<String> convertToEntityAttribute(String dbData) {
         if (dbData == null) {
-            return Collections.emptyList();
-        } else return Arrays.asList(dbData.split(","));
+            return Collections.emptySet();
+        } else return new HashSet<>(Arrays.asList(dbData.split(",")));
     }
 }

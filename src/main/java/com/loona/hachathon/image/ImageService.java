@@ -2,6 +2,7 @@ package com.loona.hachathon.image;
 
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
+import com.loona.hachathon.exception.InternalServerErrorException;
 import com.loona.hachathon.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 
 @Service
 public class ImageService {
@@ -36,11 +38,16 @@ public class ImageService {
 
     public String saveImage(MultipartFile image) {
         try {
-                String imageUrl = Hashing.sha1().hashString(image.getOriginalFilename(), Charsets.UTF_8).toString();
-                Files.copy(image.getInputStream(), this.rootLocation.resolve(imageUrl));
-                return imageUrl;
+            String imageUrl = Hashing.sha1().hashString(image.getOriginalFilename() + new Date().toString(), Charsets.UTF_8).toString();
+            if (!Files.exists(rootLocation)) {
+                Files.createDirectories(rootLocation);
+            }
+
+            Files.copy(image.getInputStream(), rootLocation.resolve(imageUrl));
+            return imageUrl;
         } catch (IOException e) {
-            throw new ResourceNotFoundException(); //TODO Replace
+            e.printStackTrace();
+            throw new InternalServerErrorException();
         }
     }
 
@@ -48,10 +55,11 @@ public class ImageService {
         try {
             Path file = rootLocation.resolve(filename);
             Resource resource = new UrlResource(file.toUri());
-            if(resource.exists() || resource.isReadable()) {
+            if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else throw new ResourceNotFoundException();
         } catch (MalformedURLException e) {
+            e.printStackTrace();
             throw new ResourceNotFoundException();
         }
     }

@@ -14,8 +14,6 @@ public class RoomDto {
 
     private String description;
 
-    private String way;
-
     private String floor;
 
     private String footage;
@@ -26,7 +24,7 @@ public class RoomDto {
 
     private String bookingType;
 
-    private List<String> options;
+    private String options;
 
     public String getSpaceId() {
         return spaceId;
@@ -66,14 +64,6 @@ public class RoomDto {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getWay() {
-        return way;
-    }
-
-    public void setWay(String way) {
-        this.way = way;
     }
 
     public String getFloor() {
@@ -116,11 +106,11 @@ public class RoomDto {
         this.bookingType = bookingType;
     }
 
-    public List<String> getOptions() {
+    public String getOptions() {
         return options;
     }
 
-    public void setOptions(List<String> options) {
+    public void setOptions(String options) {
         this.options = options;
     }
 }

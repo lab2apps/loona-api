@@ -21,10 +21,10 @@ public class Order {
     private int rentTime;
 
     @Column(name = "price")
-    private String price;
+    private int price;
 
     @Column(name = "status")
-    private String status;
+    private int status;
 
     @Column(name = "start_rent_time")
     private LocalDateTime startRentTime;
@@ -56,19 +56,19 @@ public class Order {
         this.rentTime = rentTime;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

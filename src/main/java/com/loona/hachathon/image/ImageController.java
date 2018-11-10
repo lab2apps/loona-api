@@ -9,13 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
-@RequestMapping("/api/image")
 public class ImageController {
 
     @Autowired
     private ImageService imageService;
 
-    @GetMapping("/{filename}")
+    @GetMapping("/image/{filename}")
     @ResponseBody
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
 
@@ -26,7 +25,7 @@ public class ImageController {
                 .body(file);
     }
 
-    @PostMapping
+    @PostMapping("/api/image")
     public String saveImage(@RequestParam(value = "image", required = false) MultipartFile image) {
         return imageService.saveImage(image);
     }
