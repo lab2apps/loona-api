@@ -16,6 +16,7 @@ application:
   groupId: 173753932
   serviceKey: 2d6f23ba2d6f23ba2d6f23ba982d09d26422d6f2d6f23ba768a529ed28d69072e956677
   apiVersion: 5.52
+  yandexKey: 74c5a342-8ead-45bf-964e-b94bcce3b472
   id: 6745176
   secret: LQFLwAm8zjBzDaQA9MbC
   storage:
