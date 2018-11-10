@@ -6,7 +6,7 @@ public class SpaceDto {
 
     private String name;
 
-    private List<String> imageUrls;
+    private String imageUrls;
 
     private String type;
 
@@ -20,9 +20,9 @@ public class SpaceDto {
 
     private List<String> workDays;
 
-    private int startWorkTime;
+    private String startWorkTime;
 
-    private int endWorkTime;
+    private String endWorkTime;
 
     public String getName() {
         return name;
@@ -32,11 +32,11 @@ public class SpaceDto {
         this.name = name;
     }
 
-    public List<String> getImageUrls() {
+    public String getImageUrls() {
         return imageUrls;
     }
 
-    public void setImageUrls(List<String> imageUrls) {
+    public void setImageUrls(String imageUrls) {
         this.imageUrls = imageUrls;
     }
 
@@ -88,20 +88,19 @@ public class SpaceDto {
         this.workDays = workDays;
     }
 
-    public int getStartWorkTime() {
+    public String getStartWorkTime() {
         return startWorkTime;
     }
 
-    public void setStartWorkTime(int startWorkTime) {
+    public void setStartWorkTime(String startWorkTime) {
         this.startWorkTime = startWorkTime;
     }
 
-    public int getEndWorkTime() {
+    public String getEndWorkTime() {
         return endWorkTime;
     }
 
-    public void setEndWorkTime(int endWorkTime) {
+    public void setEndWorkTime(String endWorkTime) {
         this.endWorkTime = endWorkTime;
     }
-
 }

@@ -6,24 +6,30 @@ public class RoomConverter {
         Room room = new Room();
         room.setName(roomDto.getName());
         room.setRoomType(roomDto.getRoomType());
-        room.setRentType(roomDto.getRentType());
-        room.setDescription(roomDto.getDescription());
         room.setImageUrls(roomDto.getImageUrls());
+        room.setDescription(roomDto.getDescription());
+        room.setWay(roomDto.getWay());
+        room.setFloor(roomDto.getFloor());
+        room.setFootage(roomDto.getFootage());
+        room.setRentType(roomDto.getRentType());
         room.setPrice(roomDto.getPrice());
-        room.setStartWorkTime(roomDto.getStartWorkTime());
-        room.setEndWorkTime(roomDto.getEndWorkTime());
+        room.setBookingType(roomDto.getBookingType());
+        room.setOptions(roomDto.getOptions());
         return room;
     }
 
     public static Room merge(Room originRoom, Room updatedRoom) {
         originRoom.setName(updatedRoom.getName());
         originRoom.setRoomType(updatedRoom.getRoomType());
-        originRoom.setRentType(updatedRoom.getRentType());
-        originRoom.setDescription(updatedRoom.getDescription());
         originRoom.setImageUrls(updatedRoom.getImageUrls());
+        originRoom.setDescription(updatedRoom.getDescription());
+        originRoom.setWay(updatedRoom.getWay());
+        originRoom.setFloor(updatedRoom.getFloor());
+        originRoom.setFootage(updatedRoom.getFootage());
+        originRoom.setRentType(updatedRoom.getRentType());
         originRoom.setPrice(updatedRoom.getPrice());
-        originRoom.setStartWorkTime(updatedRoom.getStartWorkTime());
-        originRoom.setEndWorkTime(updatedRoom.getEndWorkTime());
+        originRoom.setBookingType(updatedRoom.getBookingType());
+        originRoom.setOptions(updatedRoom.getOptions());
         return originRoom;
     }
 }

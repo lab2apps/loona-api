@@ -1,6 +1,5 @@
 package com.loona.hachathon.room;
 
-import com.loona.hachathon.space.Space;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

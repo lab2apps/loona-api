@@ -10,10 +10,11 @@ public class SpaceConverter {
         space.setAddress(spaceDto.getAddress());
         space.setPhone(spaceDto.getPhone());
         space.setVkLink(spaceDto.getVkLink());
-        space.setImageUrls(spaceDto.getImageUrls());
         space.setWorkDays(spaceDto.getWorkDays());
+        space.setImageUrls(spaceDto.getImageUrls());
         space.setStartWorkTime(spaceDto.getStartWorkTime());
         space.setEndWorkTime(spaceDto.getEndWorkTime());
+
         return space;
     }
 

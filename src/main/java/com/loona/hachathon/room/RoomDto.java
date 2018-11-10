@@ -1,6 +1,5 @@
 package com.loona.hachathon.room;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class RoomDto {
@@ -9,19 +8,25 @@ public class RoomDto {
 
     private String name;
 
-    private List<String> imageUrls;
-
     private String roomType;
 
-    private String rentType;
+    private String imageUrls;
 
     private String description;
 
+    private String way;
+
+    private String floor;
+
+    private String footage;
+
+    private String rentType;
+
     private int price;
 
-    private LocalDateTime startWorkTime;
+    private String bookingType;
 
-    private LocalDateTime endWorkTime;
+    private List<String> options;
 
     public String getSpaceId() {
         return spaceId;
@@ -39,14 +44,6 @@ public class RoomDto {
         this.name = name;
     }
 
-    public List<String> getImageUrls() {
-        return imageUrls;
-    }
-
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
-    }
-
     public String getRoomType() {
         return roomType;
     }
@@ -55,12 +52,12 @@ public class RoomDto {
         this.roomType = roomType;
     }
 
-    public String getRentType() {
-        return rentType;
+    public String getImageUrls() {
+        return imageUrls;
     }
 
-    public void setRentType(String rentType) {
-        this.rentType = rentType;
+    public void setImageUrls(String imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
     public String getDescription() {
@@ -71,6 +68,38 @@ public class RoomDto {
         this.description = description;
     }
 
+    public String getWay() {
+        return way;
+    }
+
+    public void setWay(String way) {
+        this.way = way;
+    }
+
+    public String getFloor() {
+        return floor;
+    }
+
+    public void setFloor(String floor) {
+        this.floor = floor;
+    }
+
+    public String getFootage() {
+        return footage;
+    }
+
+    public void setFootage(String footage) {
+        this.footage = footage;
+    }
+
+    public String getRentType() {
+        return rentType;
+    }
+
+    public void setRentType(String rentType) {
+        this.rentType = rentType;
+    }
+
     public int getPrice() {
         return price;
     }
@@ -79,19 +108,19 @@ public class RoomDto {
         this.price = price;
     }
 
-    public LocalDateTime getStartWorkTime() {
-        return startWorkTime;
+    public String getBookingType() {
+        return bookingType;
     }
 
-    public void setStartWorkTime(LocalDateTime startWorkTime) {
-        this.startWorkTime = startWorkTime;
+    public void setBookingType(String bookingType) {
+        this.bookingType = bookingType;
     }
 
-    public LocalDateTime getEndWorkTime() {
-        return endWorkTime;
+    public List<String> getOptions() {
+        return options;
     }
 
-    public void setEndWorkTime(LocalDateTime endWorkTime) {
-        this.endWorkTime = endWorkTime;
+    public void setOptions(List<String> options) {
+        this.options = options;
     }
 }

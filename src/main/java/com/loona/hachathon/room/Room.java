@@ -1,5 +1,7 @@
 package com.loona.hachathon.room;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.loona.hachathon.order.Order;
 import com.loona.hachathon.space.Space;
 import com.loona.hachathon.user.User;
 import com.loona.hachathon.util.CsvAttributeConverter;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "room")
+@JsonIgnoreProperties(value = { "orders", "vkUser", "roomSpace" })
 public class Room {
 
     @Id
@@ -22,27 +25,36 @@ public class Room {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "image_urls")
-    @Convert(converter = CsvAttributeConverter.class)
-    private List<String> imageUrls;
-
     @Column(name = "room_type")
     private String roomType;
 
-    @Column(name = "rent_type")
-    private String rentType;
+    @Column(name = "image_urls")
+//    @Convert(converter = CsvAttributeConverter.class)
+    private String imageUrls;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "price")
+    @Column(name = "way")
+    private String way;
+
+    @Column(name = "floor")
+    private String floor;
+
+    @Column(name = "footage")
+    private String footage;
+
+    @Column(name = "rent_type", nullable = false)
+    private String rentType;
+
+    @Column(name = "price", nullable = false)
     private int price;
 
-    @Column(name = "start_work_time")
-    private LocalDateTime startWorkTime;
+    @Column(name = "booking_type")
+    private String bookingType;
 
-    @Column(name = "end_work_time")
-    private LocalDateTime endWorkTime;
+    @Column(name = "options")
+    private List<String> options;
 
     @ManyToOne
     @JoinColumn(name="space_uuid")
@@ -51,6 +63,9 @@ public class Room {
     @ManyToOne
     @JoinColumn(name="vk_user_id")
     private User vkUser;
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "orderedRoom")
+    private List<Order> orders;
 
     public String getUuid() {
         return uuid;
@@ -68,14 +83,6 @@ public class Room {
         this.name = name;
     }
 
-    public List<String> getImageUrls() {
-        return imageUrls;
-    }
-
-    public void setImageUrls(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
-    }
-
     public String getRoomType() {
         return roomType;
     }
@@ -84,12 +91,12 @@ public class Room {
         this.roomType = roomType;
     }
 
-    public String getRentType() {
-        return rentType;
+    public String getImageUrls() {
+        return imageUrls;
     }
 
-    public void setRentType(String rentType) {
-        this.rentType = rentType;
+    public void setImageUrls(String imageUrls) {
+        this.imageUrls = imageUrls;
     }
 
     public String getDescription() {
@@ -100,12 +107,60 @@ public class Room {
         this.description = description;
     }
 
+    public String getWay() {
+        return way;
+    }
+
+    public void setWay(String way) {
+        this.way = way;
+    }
+
+    public String getFloor() {
+        return floor;
+    }
+
+    public void setFloor(String floor) {
+        this.floor = floor;
+    }
+
+    public String getFootage() {
+        return footage;
+    }
+
+    public void setFootage(String footage) {
+        this.footage = footage;
+    }
+
+    public String getRentType() {
+        return rentType;
+    }
+
+    public void setRentType(String rentType) {
+        this.rentType = rentType;
+    }
+
     public int getPrice() {
         return price;
     }
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public String getBookingType() {
+        return bookingType;
+    }
+
+    public void setBookingType(String bookingType) {
+        this.bookingType = bookingType;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<String> options) {
+        this.options = options;
     }
 
     public Space getRoomSpace() {
@@ -116,27 +171,19 @@ public class Room {
         this.roomSpace = roomSpace;
     }
 
-    public LocalDateTime getStartWorkTime() {
-        return startWorkTime;
-    }
-
-    public void setStartWorkTime(LocalDateTime startWorkTime) {
-        this.startWorkTime = startWorkTime;
-    }
-
-    public LocalDateTime getEndWorkTime() {
-        return endWorkTime;
-    }
-
-    public void setEndWorkTime(LocalDateTime endWorkTime) {
-        this.endWorkTime = endWorkTime;
-    }
-
     public User getVkUser() {
         return vkUser;
     }
 
     public void setVkUser(User vkUser) {
         this.vkUser = vkUser;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }

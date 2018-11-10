@@ -1,5 +1,7 @@
 package com.loona.hachathon.space;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.loona.hachathon.room.Room;
 import com.loona.hachathon.user.User;
 import com.loona.hachathon.util.CsvAttributeConverter;
@@ -10,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "space")
+@JsonIgnoreProperties(value = { "vkUser", "rooms" })
 public class Space {
 
     @Id
@@ -22,8 +25,8 @@ public class Space {
     private String name;
 
     @Column(name = "image_urls")
-    @Convert(converter = CsvAttributeConverter.class)
-    private List<String> imageUrls;
+//    @Convert(converter = CsvAttributeConverter.class)
+    private String imageUrls;
 
     @Column(name = "type")
     private String type;
@@ -45,11 +48,12 @@ public class Space {
     private List<String> workDays;
 
     @Column(name = "start_work_time")
-    private int startWorkTime;
+    private String startWorkTime;
 
     @Column(name = "end_work_time")
-    private int endWorkTime;
+    private String endWorkTime;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="vk_user_id")
     private User vkUser;
@@ -73,11 +77,11 @@ public class Space {
         this.name = name;
     }
 
-    public List<String> getImageUrls() {
+    public String getImageUrls() {
         return imageUrls;
     }
 
-    public void setImageUrls(List<String> imageUrls) {
+    public void setImageUrls(String imageUrls) {
         this.imageUrls = imageUrls;
     }
 
@@ -129,12 +133,20 @@ public class Space {
         this.workDays = workDays;
     }
 
-    public int getStartWorkTime() {
+    public String getStartWorkTime() {
         return startWorkTime;
     }
 
-    public void setStartWorkTime(int startWorkTime) {
+    public void setStartWorkTime(String startWorkTime) {
         this.startWorkTime = startWorkTime;
+    }
+
+    public String getEndWorkTime() {
+        return endWorkTime;
+    }
+
+    public void setEndWorkTime(String endWorkTime) {
+        this.endWorkTime = endWorkTime;
     }
 
     public User getVkUser() {
@@ -143,14 +155,6 @@ public class Space {
 
     public void setVkUser(User vkUser) {
         this.vkUser = vkUser;
-    }
-
-    public int getEndWorkTime() {
-        return endWorkTime;
-    }
-
-    public void setEndWorkTime(int endWorkTime) {
-        this.endWorkTime = endWorkTime;
     }
 
     public List<Room> getRooms() {
