@@ -54,6 +54,7 @@ public class Room {
     private String bookingType;
 
     @Column(name = "options")
+    @Convert(converter = CsvAttributeConverter.class)
     private List<String> options;
 
     @ManyToOne

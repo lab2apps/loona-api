@@ -1,7 +1,6 @@
 package com.loona.hachathon.search;
 
 import com.loona.hachathon.room.Room;
-import com.loona.hachathon.util.CsvAttributeConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -20,7 +19,6 @@ public class RoomSearchRepository {
     private NamedParameterJdbcOperations jdbcOps;
 
     private static final RoomSearchResultMapper roomSearchResultMapper = new RoomSearchResultMapper();
-    private static final CsvAttributeConverter csvAttributeConverter = new CsvAttributeConverter();
 
     public List<Room> search(RoomFilterParams roomFilterParams) {
         MapSqlParameterSource parameterSource = getSqlParametersFromFilter(roomFilterParams);
@@ -122,13 +120,11 @@ public class RoomSearchRepository {
 
             room.setUuid(rs.getString(1));
             room.setDescription(rs.getString(2));
-            room.setEndWorkTime(rs.getTimestamp(3).toLocalDateTime());
-            room.setImageUrls(csvAttributeConverter.convertToEntityAttribute(rs.getString(4)));
+            room.setImageUrls(rs.getString(4));
             room.setName(rs.getString(5));
             room.setPrice(rs.getInt(6));
             room.setRentType(rs.getString(7));
             room.setRoomType(rs.getString(8));
-            room.setStartWorkTime(rs.getTimestamp(9).toLocalDateTime());
 
             return room;
         }
