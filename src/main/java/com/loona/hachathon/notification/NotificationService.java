@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -110,6 +111,11 @@ public class NotificationService {
             if (space != null) {
                 payload.setSpace(objectMapper.writeValueAsString(space));
                 payload.setUser(objectMapper.writeValueAsString(space.getVkUser()));
+                return objectMapper.writeValueAsString(payload);
+            }
+            User currentUser = userService.getUserById(userId);
+            if (currentUser != null) {
+                payload.setUser(objectMapper.writeValueAsString(currentUser));
                 return objectMapper.writeValueAsString(payload);
             }
         } catch (JsonProcessingException e) {
