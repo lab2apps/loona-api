@@ -28,8 +28,13 @@ public class RoomService {
     @Autowired
     private UserService userService;
 
-    public List<Room> getRooms() {
-        return roomRepository.findAll();
+    public List<Room> getRooms(String spaceId) {
+        if (spaceId == null)
+            return roomRepository.findAll();
+        else {
+            Space space = spaceService.getSpace(spaceId);
+            return space.getRooms();
+        }
     }
 
     public List<Room> getMyRooms() {

@@ -13,8 +13,8 @@ public class RoomController {
     private RoomService roomService;
 
     @GetMapping("/rooms")
-    public List<Room> getRooms() {
-        return roomService.getRooms();
+    public List<Room> getRooms(@RequestParam("spaceId") String spaceId) {
+        return roomService.getRooms(spaceId);
     }
 
     @GetMapping("/rooms/my")
