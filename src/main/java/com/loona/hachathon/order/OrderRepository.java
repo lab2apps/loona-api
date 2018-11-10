@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, String> {
 
-    List<Order> findAllByOrderedRoomAndEndRentTimeAfterOrAndStartRentTime(Room orderedRoom, LocalDate fromDate, LocalDate toDate);
+    List<Order> findAllByOrderedRoomAndEndRentTimeAfterOrAndStartRentTime(Room orderedRoom, LocalDateTime fromDate, LocalDateTime toDate);
     Order findOrderByUuid(String uuid);
     List<Order> findAllByVkUser(User vkUser);
 }

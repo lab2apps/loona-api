@@ -97,7 +97,7 @@ public class OrderService {
     public Set<LocalDate> getOrdersByRoom(String roomId, LocalDate fromDate, LocalDate toDate) {
         Room room = roomService.getRoom(roomId);
         if (room != null) {
-            List<Order> orders = orderRepository.findAllByOrderedRoomAndEndRentTimeAfterOrAndStartRentTime(room, fromDate, toDate);
+            List<Order> orders = orderRepository.findAllByOrderedRoomAndEndRentTimeAfterOrAndStartRentTime(room, fromDate.atStartOfDay(), toDate.atStartOfDay());
             Month month = fromDate.getMonth();
             Set<LocalDate> bookedDates = new HashSet<>();
             orders.forEach(it -> {

@@ -25,9 +25,9 @@ public class OrderController {
     @GetMapping("/order")
     public Set<LocalDate> getOrdersByRoom(@RequestParam(value = "roomId") String roomId,
                                           @RequestParam(value = "fromDate")
-                                       @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
+                                          @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
                                           @RequestParam(value = "toDate")
-                                       @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate) {
+                                              @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate) {
         return orderService.getOrdersByRoom(roomId, fromDate, toDate);
     }
 
