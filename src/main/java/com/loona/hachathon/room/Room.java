@@ -39,13 +39,13 @@ public class Room {
     private String floor;
 
     @Column(name = "footage")
-    private int footage;
+    private String footage;
 
     @Column(name = "rent_type", nullable = false)
     private String rentType;
 
     @Column(name = "price", nullable = false)
-    private int price;
+    private Integer price;
 
     @Column(name = "booking_type")
     private String bookingType;
@@ -113,11 +113,11 @@ public class Room {
         this.floor = floor;
     }
 
-    public int getFootage() {
+    public String getFootage() {
         return footage;
     }
 
-    public void setFootage(int footage) {
+    public void setFootage(String footage) {
         this.footage = footage;
     }
 

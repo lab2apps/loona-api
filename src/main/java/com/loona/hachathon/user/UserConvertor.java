@@ -8,8 +8,6 @@ public class UserConvertor {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setSex(userDto.getSex());
-        user.setCity(userDto.getCity());
-        user.setCountry(userDto.getCountry());
         user.setSignedId(userDto.getSignedUserId());
         return user;
     }

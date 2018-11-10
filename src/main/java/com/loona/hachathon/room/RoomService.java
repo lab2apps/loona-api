@@ -2,6 +2,7 @@ package com.loona.hachathon.room;
 
 import com.loona.hachathon.exception.BadRequestException;
 import com.loona.hachathon.exception.ResourceNotFoundException;
+import com.loona.hachathon.order.OrderRepository;
 import com.loona.hachathon.space.Space;
 import com.loona.hachathon.space.SpaceService;
 import com.loona.hachathon.user.User;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,17 +25,29 @@ public class RoomService {
     private RoomRepository roomRepository;
 
     @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
     private SpaceService spaceService;
 
     @Autowired
     private UserService userService;
 
-    public List<Room> getRooms(String spaceId) {
-        if (spaceId == null)
-            return roomRepository.findAll();
-        else {
+    public List<RoomResponseDto> getRooms(String spaceId) {
+        String currentUserId = getCurrentUserId();
+        if (spaceId == null) {
+            List<RoomResponseDto> roomDto = new ArrayList<>();
+            roomRepository.findAll().forEach(it -> {
+                roomDto.add(RoomConverter.convert(it, it.getVkUser().getId().equals(currentUserId)));
+            });
+            return roomDto;
+        } else {
             Space space = spaceService.getSpace(spaceId);
-            return space.getRooms();
+            List<RoomResponseDto> roomDto = new ArrayList<>();
+            space.getRooms().forEach(it -> {
+                roomDto.add(RoomConverter.convert(it, it.getVkUser().getId().equals(currentUserId)));
+            });
+            return roomDto;
         }
     }
 
@@ -58,6 +72,17 @@ public class RoomService {
         }
     }
 
+    public RoomResponseDto getRoomDto(String roomId) {
+        String currentUserId = getCurrentUserId();
+        Room room = roomRepository.findRoomByUuid(roomId);
+        if (room == null) {
+            logger.warn("getRoomDto room {} not found", roomId);
+            throw new ResourceNotFoundException();
+        } else {
+            return RoomConverter.convert(room, room.getVkUser().getId().equals(currentUserId));
+        }
+    }
+
     public void createRoom(RoomDto roomDto) {
         String currentUserId = getCurrentUserId();
         Space space = spaceService.getSpace(roomDto.getSpaceId());
@@ -69,6 +94,7 @@ public class RoomService {
     }
 
     public void updateRoom(String roomId, RoomDto roomDto) {
+        logger.info("updateRoom room {}", roomId);
         Room originRoom = roomRepository.findRoomByUuid(roomId);
         if (originRoom == null) {
             logger.warn("updateRoom room {} not found", roomId);
@@ -85,6 +111,7 @@ public class RoomService {
             logger.warn("deleteRoom room {} not found", roomId);
             throw  new ResourceNotFoundException();
         } else {
+            room.getOrders().forEach(it -> orderRepository.delete(it));
             roomRepository.deleteById(roomId);
         }
     }

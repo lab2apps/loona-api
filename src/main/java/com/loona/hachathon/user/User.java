@@ -1,5 +1,7 @@
 package com.loona.hachathon.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.loona.hachathon.notification.Notifications;
 import com.loona.hachathon.room.Room;
 import com.loona.hachathon.space.Space;
 
@@ -8,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "vk_user")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
 
     @Id
@@ -23,12 +26,6 @@ public class User {
     @Column(name = "sex")
     private String sex;
 
-    @Column(name = "city")
-    private String city;
-
-    @Column(name = "country")
-    private String country;
-
     @Column(name = "signedId")
     private String signedId;
 
@@ -37,6 +34,9 @@ public class User {
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "vkUser")
     private List<Room> rooms;
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "vkUser")
+    private List<Notifications> notifications;
 
     public String getId() {
         return id;
@@ -70,22 +70,6 @@ public class User {
         this.sex = sex;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getSignedId() {
         return signedId;
     }
@@ -100,6 +84,14 @@ public class User {
 
     public void setSpaces(List<Space> spaces) {
         this.spaces = spaces;
+    }
+
+    public List<Notifications> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notifications> notifications) {
+        this.notifications = notifications;
     }
 
     public List<Room> getRooms() {

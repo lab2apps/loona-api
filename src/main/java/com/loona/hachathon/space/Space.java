@@ -54,7 +54,6 @@ public class Space {
     @Column(name = "end_work_time")
     private String endWorkTime;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="vk_user_id")
     private User vkUser;

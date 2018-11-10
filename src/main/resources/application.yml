@@ -14,7 +14,8 @@ spring:
       ddl-auto: update
 application:
   groupId: 173753932
-  serviceKey: a0ba7f69a0ba7f69a0ba7f6920a0dc9331aa0baa0ba7f69fb59b26d9890002a53a6cf04
+  serviceKey: 2d6f23ba2d6f23ba2d6f23ba982d09d26422d6f2d6f23ba768a529ed28d69072e956677
+  apiVersion: 5.52
   id: 6745176
   secret: LQFLwAm8zjBzDaQA9MbC
   storage:

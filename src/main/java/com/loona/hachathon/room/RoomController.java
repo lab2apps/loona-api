@@ -13,7 +13,7 @@ public class RoomController {
     private RoomService roomService;
 
     @GetMapping("/rooms")
-    public List<Room> getRooms(@RequestParam(value = "spaceId", required = false) String spaceId) {
+    public List<RoomResponseDto> getRooms(@RequestParam(value = "spaceId", required = false) String spaceId) {
         return roomService.getRooms(spaceId);
     }
 
@@ -23,8 +23,8 @@ public class RoomController {
     }
 
     @GetMapping("/room/{id}")
-    public Room getRoom(@PathVariable(value = "id") String id) {
-        return roomService.getRoom(id);
+    public RoomResponseDto getRoom(@PathVariable(value = "id") String id) {
+        return roomService.getRoomDto(id);
     }
 
     @PostMapping("/room")

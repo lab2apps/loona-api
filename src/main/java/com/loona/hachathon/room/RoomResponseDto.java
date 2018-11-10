@@ -1,32 +1,22 @@
 package com.loona.hachathon.room;
 
+import java.util.List;
 import java.util.Set;
 
-public class RoomDto {
+public class RoomResponseDto {
 
     private String uuid;
-
-    private String spaceId;
-
     private String name;
-
     private String roomType;
-
-    private String imageUrls;
-
+    private List<String> imageUrls;
     private String description;
-
     private String floor;
-
     private String footage;
-
     private String rentType;
-
-    private int price;
-
+    private Integer price;
     private String bookingType;
-
     private Set<String> options;
+    private boolean mySpace;
 
     public String getUuid() {
         return uuid;
@@ -34,14 +24,6 @@ public class RoomDto {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getSpaceId() {
-        return spaceId;
-    }
-
-    public void setSpaceId(String spaceId) {
-        this.spaceId = spaceId;
     }
 
     public String getName() {
@@ -60,11 +42,11 @@ public class RoomDto {
         this.roomType = roomType;
     }
 
-    public String getImageUrls() {
+    public List<String> getImageUrls() {
         return imageUrls;
     }
 
-    public void setImageUrls(String imageUrls) {
+    public void setImageUrls(List<String> imageUrls) {
         this.imageUrls = imageUrls;
     }
 
@@ -100,11 +82,11 @@ public class RoomDto {
         this.rentType = rentType;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -122,5 +104,13 @@ public class RoomDto {
 
     public void setOptions(Set<String> options) {
         this.options = options;
+    }
+
+    public boolean isMySpace() {
+        return mySpace;
+    }
+
+    public void setMySpace(boolean mySpace) {
+        this.mySpace = mySpace;
     }
 }

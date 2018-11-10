@@ -26,6 +26,9 @@ public class Order {
     @Column(name = "status")
     private int status;
 
+    @Column(name = "booking_type")
+    private String bookingType;
+
     @Column(name = "start_rent_time")
     private LocalDateTime startRentTime;
 
@@ -70,6 +73,14 @@ public class Order {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getBookingType() {
+        return bookingType;
+    }
+
+    public void setBookingType(String bookingType) {
+        this.bookingType = bookingType;
     }
 
     public LocalDateTime getStartRentTime() {

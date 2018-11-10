@@ -1,5 +1,8 @@
 package com.loona.hachathon.room;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class RoomConverter {
 
     public static Room convert(RoomDto roomDto) {
@@ -14,14 +17,32 @@ public class RoomConverter {
         room.setImageUrls(roomDto.getImageUrls());
         room.setDescription(roomDto.getDescription());
         room.setFloor(roomDto.getFloor());
-        if (roomDto.getFootage() != null && !roomDto.getFootage().isEmpty()) {
-            room.setFootage(Integer.valueOf(roomDto.getFootage()));
-        }
+        room.setFootage(roomDto.getFootage());
         room.setRentType(roomDto.getRentType());
         room.setPrice(roomDto.getPrice());
         room.setBookingType(roomDto.getBookingType());
         room.setOptions(roomDto.getOptions());
         return room;
+    }
+
+    public static RoomResponseDto convert(Room room, boolean mySpace) {
+        RoomResponseDto dto = new RoomResponseDto();
+        dto.setUuid(room.getUuid());
+        dto.setName(room.getName());
+        dto.setRoomType(room.getRoomType());
+        if (room.getImageUrls() == null) {
+            dto.setImageUrls(Collections.emptyList());
+        } else
+            dto.setImageUrls(Arrays.asList(room.getImageUrls().split(",")));
+        dto.setDescription(room.getDescription());
+        dto.setFloor(room.getFloor());
+        dto.setFootage(room.getFootage());
+        dto.setRentType(room.getRentType());
+        dto.setPrice(room.getPrice());
+        dto.setBookingType(room.getBookingType());
+        dto.setOptions(room.getOptions());
+        dto.setMySpace(mySpace);
+        return dto;
     }
 
     public static Room merge(Room originRoom, Room updatedRoom) {

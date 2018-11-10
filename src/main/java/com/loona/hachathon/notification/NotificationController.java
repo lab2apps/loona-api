@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api", produces = "application/json")
@@ -21,9 +22,17 @@ public class NotificationController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @GetMapping("/notifications/enable")
     public void enableNotifications() {
         userService.enableNotifications();
+    }
+
+    @GetMapping("/notifications")
+    public List<Notifications> getUserNotifications() {
+        return notificationService.getUserNotifications();
     }
 }
 
