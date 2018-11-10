@@ -10,6 +10,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "room")
@@ -51,7 +52,8 @@ public class Room {
     private String bookingType;
 
     @Column(name = "options")
-    private String options;
+    @Convert(converter = CsvAttributeConverter.class)
+    private Set<String> options;
 
     @ManyToOne
     @JoinColumn(name="space_uuid")
@@ -144,11 +146,11 @@ public class Room {
         this.bookingType = bookingType;
     }
 
-    public String getOptions() {
+    public Set<String> getOptions() {
         return options;
     }
 
-    public void setOptions(String options) {
+    public void setOptions(Set<String> options) {
         this.options = options;
     }
 

@@ -6,6 +6,8 @@ import com.loona.hachathon.space.Space;
 import com.loona.hachathon.space.SpaceService;
 import com.loona.hachathon.user.User;
 import com.loona.hachathon.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Service
 public class RoomService {
+
+    private static Logger logger = LoggerFactory.getLogger(RoomService.class);
 
     @Autowired
     private RoomRepository roomRepository;
@@ -34,6 +38,7 @@ public class RoomService {
         if (currentUser != null) {
             return roomRepository.findByVkUser(currentUser);
         } else {
+            logger.warn("getMyRooms user {} not found", currentUserId);
             throw new BadRequestException();
         }
     }
@@ -41,6 +46,7 @@ public class RoomService {
     public Room getRoom(String roomId) {
         Room room = roomRepository.findRoomByUuid(roomId);
         if (room == null) {
+            logger.warn("getRoom room {} not found", roomId);
             throw new ResourceNotFoundException();
         } else {
             return room;
@@ -60,6 +66,7 @@ public class RoomService {
     public void updateRoom(String roomId, RoomDto roomDto) {
         Room originRoom = roomRepository.findRoomByUuid(roomId);
         if (originRoom == null) {
+            logger.warn("updateRoom room {} not found", roomId);
             throw new ResourceNotFoundException();
         } else {
             Room updatedRoom = RoomConverter.convert(roomDto);
@@ -70,6 +77,7 @@ public class RoomService {
     public void deleteRoom(String roomId) {
         Room room = roomRepository.findRoomByUuid(roomId);
         if (room == null) {
+            logger.warn("deleteRoom room {} not found", roomId);
             throw  new ResourceNotFoundException();
         } else {
             roomRepository.deleteById(roomId);

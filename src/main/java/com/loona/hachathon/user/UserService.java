@@ -2,7 +2,10 @@ package com.loona.hachathon.user;
 
 import com.loona.hachathon.authentication.VkUserKeyValidator;
 import com.loona.hachathon.exception.UnauthorizedAccessException;
+import com.loona.hachathon.space.SpaceService;
 import org.checkerframework.checker.units.qual.A;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,8 @@ import java.util.Set;
 
 @Service
 public class UserService {
+
+    private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -48,8 +53,18 @@ public class UserService {
         return userRepository.findUserById(userId);
     }
 
+
+    public void enableNotifications() {
+        String currentUserId = getCurrentUserId();
+        logger.info("Enable notifications for user {}", currentUserId);
+        UserSettings userSettings = userSettingsRepository.findUserSettingsById(currentUserId);
+        userSettings.setNotificationAllowed(true);
+        userSettingsRepository.save(userSettings);
+    }
+
     public void addSpacesToFavorite(String spaceId) {
         String currentUserId = getCurrentUserId();
+        logger.info("addSpacesToFavorite for user {} space {}", currentUserId, spaceId);
         UserSettings userSettings = userSettingsRepository.findUserSettingsById(currentUserId);
         Set<String> favoriteSpaces = userSettings.getFavoriteSpaces();
         favoriteSpaces.add(spaceId);
@@ -59,6 +74,7 @@ public class UserService {
 
     public void deleteSpacesFromFavorite(String spaceId) {
         String currentUserId = getCurrentUserId();
+        logger.info("deleteSpacesFromFavorite for user {} space {}", currentUserId, spaceId);
         UserSettings userSettings = userSettingsRepository.findUserSettingsById(currentUserId);
         Set<String> favoriteSpaces = userSettings.getFavoriteSpaces();
         favoriteSpaces.remove(spaceId);

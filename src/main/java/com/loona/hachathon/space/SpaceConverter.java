@@ -14,7 +14,11 @@ public class SpaceConverter {
         space.setPhone(spaceDto.getPhone());
         space.setVkLink(spaceDto.getVkLink());
         space.setWorkDays(spaceDto.getWorkDays());
-        space.setImageUrls(spaceDto.getImageUrls());
+        if (spaceDto.getImageUrls() != null && !spaceDto.getImageUrls().isEmpty()) {
+            space.setImageUrls(spaceDto.getImageUrls());
+        } else {
+            space.setImageUrls(null);
+        }
         space.setStartWorkTime(spaceDto.getStartWorkTime());
         space.setEndWorkTime(spaceDto.getEndWorkTime());
 

@@ -21,4 +21,14 @@ public class OrderController {
     public List<Order> getMyOrders() {
         return orderService.getMyOrders();
     }
+
+    @GetMapping("/order/{id}/submit")
+    public void submitOrder(@PathVariable(value = "id") String id) {
+        orderService.submitOrder(id);
+    }
+
+    @GetMapping("/order/{id}/fail")
+    public void failOrder(@PathVariable(value = "id") String id) {
+        orderService.failOrder(id);
+    }
 }

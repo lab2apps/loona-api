@@ -6,6 +6,11 @@ public class RoomConverter {
         Room room = new Room();
         room.setName(roomDto.getName());
         room.setRoomType(roomDto.getRoomType());
+        if (roomDto.getImageUrls() != null && !roomDto.getImageUrls().isEmpty()) {
+            roomDto.setImageUrls(roomDto.getImageUrls());
+        } else {
+            roomDto.setImageUrls(null);
+        }
         room.setImageUrls(roomDto.getImageUrls());
         room.setDescription(roomDto.getDescription());
         room.setFloor(roomDto.getFloor());

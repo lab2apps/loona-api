@@ -5,6 +5,8 @@ import com.loona.hachathon.room.Room;
 import com.loona.hachathon.room.RoomService;
 import com.loona.hachathon.user.User;
 import com.loona.hachathon.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +19,8 @@ public class OrderService {
 
     @Value("${application.groupId}")
     private int groupId;
+
+    private static Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
     private OrderRepository orderRepository;
@@ -54,10 +58,34 @@ public class OrderService {
             userService.addSpacesToFavorite(room.getRoomSpace().getUuid());
 
             OrderVerifiedDto dto = new OrderVerifiedDto();
+            dto.setOrderId(order.getUuid());
             dto.setPrice(price);
             dto.setReceiverId(groupId);
             return dto;
         } else {
+            logger.warn("createOrder room or user not found");
+            throw new BadRequestException();
+        }
+    }
+
+    public void submitOrder(String orderId) {
+        Order order = orderRepository.findOrderByUuid(orderId);
+        if (order != null) {
+            order.setStatus(2);
+            orderRepository.save(order);
+        } else {
+            logger.warn("submitOrder order {} not found", orderId);
+            throw new BadRequestException();
+        }
+    }
+
+    public void failOrder(String orderId) {
+        Order order = orderRepository.findOrderByUuid(orderId);
+        if (order != null) {
+            order.setStatus(3);
+            orderRepository.save(order);
+        } else {
+            logger.warn("failOrder order {} not found", orderId);
             throw new BadRequestException();
         }
     }
@@ -68,6 +96,7 @@ public class OrderService {
         if (currentUser != null) {
             return orderRepository.findAllByVkUser(currentUser);
         } else {
+            logger.warn("getMyOrders user {} not found", currentUserId);
             throw new BadRequestException();
         }
     }

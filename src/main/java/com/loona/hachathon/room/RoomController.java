@@ -23,7 +23,7 @@ public class RoomController {
     }
 
     @GetMapping("/room/{id}")
-    public Room getRoom(@PathVariable(value = "id", required = false) String id) {
+    public Room getRoom(@PathVariable(value = "id") String id) {
         return roomService.getRoom(id);
     }
 

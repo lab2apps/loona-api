@@ -2,8 +2,17 @@ package com.loona.hachathon.order;
 
 public class OrderVerifiedDto {
 
+    private String orderId;
     private int price;
     private int receiverId;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
 
     public int getPrice() {
         return price;

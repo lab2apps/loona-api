@@ -25,6 +25,8 @@ repositories {
 
 
 dependencies {
+	compile 'com.vk.api:sdk:0.5.12'
+	compile group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.22'
 	compile 'io.jsonwebtoken:jjwt-api:0.10.5'
 	runtime 'io.jsonwebtoken:jjwt-impl:0.10.5'
 	runtime 'io.jsonwebtoken:jjwt-jackson:0.10.5'
