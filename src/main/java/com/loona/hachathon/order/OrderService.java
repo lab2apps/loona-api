@@ -95,34 +95,26 @@ public class OrderService {
     }
 
     public Set<LocalDate> getOrdersByRoom(String roomId, LocalDate fromDate, LocalDate toDate) {
-        Set<LocalDate> bookedDates = new HashSet<>();
-        LocalDate startTime = fromDate;
-        LocalDate endTime = toDate;
-        while (!startTime.isAfter(endTime)) {
-            bookedDates.add(startTime);
-            startTime = startTime.plusDays(1);
+        Room room = roomService.getRoom(roomId);
+        if (room != null) {
+            List<Order> orders = orderRepository.findAllByOrderedRoomAndEndRentTimeAfterOrAndStartRentTime(room, fromDate.atStartOfDay(), toDate.atStartOfDay());
+            Month month = fromDate.getMonth();
+            Set<LocalDate> bookedDates = new HashSet<>();
+            orders.forEach(it -> {
+                LocalDate startTime = it.getStartRentTime().toLocalDate();
+                LocalDate endTime = it.getEndRentTime().toLocalDate();
+                while (!startTime.isAfter(endTime)) {
+                    if (startTime.getMonth().equals(month)) {
+                        bookedDates.add(startTime);
+                    }
+                    startTime = startTime.plusDays(1);
+                }
+            });
+            return bookedDates;
+        } else {
+            logger.warn("getOrdersByRoom room {} not found", roomId);
+            throw new BadRequestException();
         }
-        return bookedDates;
-//        Room room = roomService.getRoom(roomId);
-//        if (room != null) {
-//            List<Order> orders = orderRepository.findAllByOrderedRoomAndEndRentTimeAfterOrAndStartRentTime(room, fromDate.atStartOfDay(), toDate.atStartOfDay());
-//            Month month = fromDate.getMonth();
-//            Set<LocalDate> bookedDates = new HashSet<>();
-//            orders.forEach(it -> {
-//                LocalDate startTime = it.getStartRentTime().toLocalDate();
-//                LocalDate endTime = it.getEndRentTime().toLocalDate();
-//                while (!startTime.isAfter(endTime)) {
-//                    if (startTime.getMonth().equals(month)) {
-//                        bookedDates.add(startTime);
-//                    }
-//                    startTime = startTime.plusDays(1);
-//                }
-//            });
-//            return bookedDates;
-//        } else {
-//            logger.warn("getOrdersByRoom room {} not found", roomId);
-//            throw new BadRequestException();
-//        }
     }
 
     public List<Order> getMyOrders() {
