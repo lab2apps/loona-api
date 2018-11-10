@@ -10,6 +10,7 @@ import com.loona.hachathon.space.Space;
 import com.loona.hachathon.space.SpaceRepository;
 import com.loona.hachathon.user.User;
 import com.loona.hachathon.user.UserService;
+import com.loona.hachathon.user.UserSettingsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,9 @@ public class NotificationService {
     @Autowired
     private SpaceRepository spaceRepository;
 
+    @Autowired
+    private UserSettingsRepository userSettingsRepository;
+
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
@@ -82,7 +86,17 @@ public class NotificationService {
         }
     }
 
-    public void addUserNotifications(String userId, String spaceId, String roomId, String type) {
+//    public void notifyNewRoomAdded(String spaceId, String roomId) {
+//
+//    }
+
+    public void notifyNewRoomAdded(String spaceId, String roomId) {
+        userSettingsRepository.findAllByFavoriteSpacesContaining(spaceId).forEach(it -> {
+            addUserNotifications(it.getId(), spaceId, roomId, "NEW_ROOM_ADDED");
+        });
+    }
+
+    private void addUserNotifications(String userId, String spaceId, String roomId, String type) {
         User currentUser = userService.getUserById(userId);
         if (currentUser != null) {
             Notifications notifications = new Notifications();
