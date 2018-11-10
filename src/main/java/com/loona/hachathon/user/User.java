@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "vk_user")
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(value = { "spaces", "rooms", "notifications" })
 public class User {
 
     @Id

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/space/search")
+@RequestMapping("/api/space/search")
 public class SpaceSearchController {
 
     @Autowired

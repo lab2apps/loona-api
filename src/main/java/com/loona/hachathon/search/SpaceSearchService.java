@@ -20,15 +20,19 @@ public class SpaceSearchService {
     private SpaceRepository spaceRepository;
 
     public List<SpaceResponseDto> search(String spaceName) {
+        String currentUserId = getCurrentUserId();
         if (spaceName.isEmpty()) {
-            return Collections.emptyList();
+            List<SpaceResponseDto> result = new ArrayList<>();
+            spaceRepository.findAll().forEach(it -> {
+                result.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId)));
+            });
+            return result;
         }
 
         List<Space> foundSpaces = spaceRepository.findByNameLike(spaceName);
 
         List<SpaceResponseDto> result = new ArrayList<>();
 
-        String currentUserId = getCurrentUserId();
         for (Space foundSpace : foundSpaces) {
             User vkUser = foundSpace.getVkUser();
             boolean isMySpace = false;

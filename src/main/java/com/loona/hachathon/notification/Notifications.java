@@ -4,6 +4,7 @@ import com.loona.hachathon.user.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notification")
@@ -15,11 +16,14 @@ public class Notifications {
     @Column(name = "uuid", unique = true)
     private String uuid;
 
-    @Column(name = "message")
-    private String message;
+    @Column(name = "payload")
+    private String payload;
 
     @Column(name = "type")
     private String type;
+
+    @Column(name = "timestamp")
+    private LocalDateTime timestamp;
 
     @ManyToOne
     @JoinColumn(name="vk_user_id")
@@ -33,12 +37,12 @@ public class Notifications {
         this.uuid = uuid;
     }
 
-    public String getMessage() {
-        return message;
+    public String getPayload() {
+        return payload;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setPayload(String payload) {
+        this.payload = payload;
     }
 
     public String getType() {
@@ -47,6 +51,14 @@ public class Notifications {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     public User getVkUser() {

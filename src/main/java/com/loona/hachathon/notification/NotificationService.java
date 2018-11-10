@@ -1,8 +1,13 @@
 package com.loona.hachathon.notification;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loona.hachathon.exception.BadRequestException;
+import com.loona.hachathon.room.Room;
+import com.loona.hachathon.room.RoomRepository;
+import com.loona.hachathon.space.Space;
+import com.loona.hachathon.space.SpaceRepository;
 import com.loona.hachathon.user.User;
 import com.loona.hachathon.user.UserService;
 import org.slf4j.Logger;
@@ -16,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,6 +39,12 @@ public class NotificationService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoomRepository roomRepository;
+
+    @Autowired
+    private SpaceRepository spaceRepository;
 
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
@@ -69,18 +81,41 @@ public class NotificationService {
         }
     }
 
-    public void addUserNotifications(String userId, String message, String type) {
+    public void addUserNotifications(String userId, String spaceId, String roomId, String type) {
         User currentUser = userService.getUserById(userId);
         if (currentUser != null) {
             Notifications notifications = new Notifications();
-            notifications.setMessage(message);
+            notifications.setPayload(getPayload(userId, spaceId, roomId));
             notifications.setType(type);
+            notifications.setTimestamp(LocalDateTime.now());
             notifications.setVkUser(currentUser);
             notificationRepository.save(notifications);
         } else {
             logger.warn("addUserNotifications user {} not found", userId);
             throw new BadRequestException();
         }
+    }
+
+    private String getPayload(String userId, String spaceId, String roomId) {
+        Payload payload = new Payload();
+        try {
+            Room room = roomRepository.findRoomByUuid(roomId);
+            if (room != null) {
+                payload.setRoom(objectMapper.writeValueAsString(room));
+                payload.setSpace(objectMapper.writeValueAsString(room.getRoomSpace()));
+                payload.setUser(objectMapper.writeValueAsString(room.getVkUser()));
+                return objectMapper.writeValueAsString(payload);
+            }
+            Space space = spaceRepository.findSpaceByUuid(spaceId);
+            if (space != null) {
+                payload.setSpace(objectMapper.writeValueAsString(space));
+                payload.setUser(objectMapper.writeValueAsString(space.getVkUser()));
+                return objectMapper.writeValueAsString(payload);
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private boolean isNotificationsAllowed(String userId) {

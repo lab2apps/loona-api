@@ -22,9 +22,4 @@ public class AuthenticationController {
         userService.validateExistingUserOrCreate(userDto);
         return jwtTokenUtil.getUserToken(userDto.getId());
     }
-
-    @GetMapping("/authentication")
-    public String userAuthentication() {
-        return jwtTokenUtil.getUserToken("userId");
-    }
 }
