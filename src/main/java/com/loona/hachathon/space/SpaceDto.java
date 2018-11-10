@@ -1,6 +1,5 @@
 package com.loona.hachathon.space;
 
-import java.util.List;
 import java.util.Set;
 
 public class SpaceDto {

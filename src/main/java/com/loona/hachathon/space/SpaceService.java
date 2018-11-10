@@ -2,11 +2,11 @@ package com.loona.hachathon.space;
 
 import com.loona.hachathon.exception.BadRequestException;
 import com.loona.hachathon.exception.ResourceNotFoundException;
-import com.loona.hachathon.order.OrderService;
 import com.loona.hachathon.room.RoomService;
 import com.loona.hachathon.user.User;
 import com.loona.hachathon.user.UserService;
-import org.checkerframework.checker.units.qual.A;
+import com.loona.hachathon.util.AddressResolver;
+import com.loona.hachathon.util.LatLongDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +29,9 @@ public class SpaceService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AddressResolver addressResolver;
 
     public List<SpaceResponseDto> getSpaces() {
         String currentUserId = getCurrentUserId();
@@ -80,21 +83,41 @@ public class SpaceService {
         if (space == null) {
             logger.warn("Updating space {} not found", spaceId);
             throw new ResourceNotFoundException();
-        } else {
-            spaceRepository.save(SpaceConverter.merge(space, updatedSpace));
         }
+
+        if (updatedSpace.getAddress() != null) {
+            LatLongDto updatedLatLongDto = addressResolver.resolveAddress(updatedSpace.getAddress());
+            if (updatedLatLongDto != null) {
+                updatedSpace.setLatitude(updatedLatLongDto.getLatitude());
+                updatedSpace.setLongitude(updatedLatLongDto.getLongitude());
+            } else {
+                updatedSpace.setLatitude(null);
+                updatedSpace.setLongitude(null);
+            }
+        }
+
+        spaceRepository.save(SpaceConverter.merge(space, updatedSpace));
     }
 
     public void saveSpace(Space space) {
         String currentUserId = getCurrentUserId();
         User currentUser = userService.getUserById(currentUserId);
-        if (currentUser != null) {
-            space.setVkUser(currentUser);
-            spaceRepository.save(space);
-        } else {
+
+        if (currentUser == null) {
             logger.warn("Saving space user {} not found", currentUserId);
             throw new BadRequestException();
         }
+
+        space.setVkUser(currentUser);
+
+        LatLongDto latLongDto = addressResolver.resolveAddress(space.getAddress());
+
+        if (latLongDto != null) {
+            space.setLatitude(latLongDto.getLatitude());
+            space.setLongitude(latLongDto.getLongitude());
+        }
+
+        spaceRepository.save(space);
     }
 
     public void deleteSpace(String spaceId) {

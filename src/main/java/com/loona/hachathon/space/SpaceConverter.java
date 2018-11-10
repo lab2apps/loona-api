@@ -41,6 +41,8 @@ public class SpaceConverter {
         result.setWorkDays(space.getWorkDays());
         result.setStartWorkTime(space.getStartWorkTime());
         result.setEndWorkTime(space.getEndWorkTime());
+        result.setLatitude(space.getLatitude());
+        result.setLongitude(space.getLongitude());
         result.setMySpace(isMySpace);
         return result;
     }
@@ -56,6 +58,8 @@ public class SpaceConverter {
         originSpace.setWorkDays(newSpace.getWorkDays());
         originSpace.setStartWorkTime(newSpace.getStartWorkTime());
         originSpace.setEndWorkTime(newSpace.getEndWorkTime());
+        originSpace.setLongitude(newSpace.getLongitude());
+        originSpace.setLatitude(newSpace.getLatitude());
         return originSpace;
     }
 }

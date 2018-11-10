@@ -1,6 +1,5 @@
 package com.loona.hachathon.space;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.loona.hachathon.room.Room;
 import com.loona.hachathon.user.User;
@@ -53,6 +52,12 @@ public class Space {
 
     @Column(name = "end_work_time")
     private String endWorkTime;
+
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
 
     @ManyToOne
     @JoinColumn(name="vk_user_id")
@@ -147,6 +152,22 @@ public class Space {
 
     public void setEndWorkTime(String endWorkTime) {
         this.endWorkTime = endWorkTime;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public User getVkUser() {

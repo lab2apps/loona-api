@@ -16,6 +16,8 @@ public class SpaceResponseDto {
     private Set<String> workDays;
     private String startWorkTime;
     private String endWorkTime;
+    private Double latitude;
+    private Double longitude;
     private boolean mySpace;
 
     public String getUuid() {
@@ -108,6 +110,22 @@ public class SpaceResponseDto {
 
     public boolean isMySpace() {
         return mySpace;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public void setMySpace(boolean mySpace) {
