@@ -22,12 +22,12 @@ public class UserService {
         } else if (currentUser != null && !currentUser.getId().equals(user.getId())) {
             throw new UnauthorizedAccessException("Invalid user Id");
         } else {
-            if (vkUserKeyValidator.isKeyValid(user.getId(), user.getSignedId())) {
+//            if (vkUserKeyValidator.isKeyValid(user.getId(), user.getSignedId())) { //TODO:: check validation
                 userRepository.save(user);
                 return false;
-            } else {
-                throw new UnauthorizedAccessException("User signed key validation failed");
-            }
+//            } else {
+//                throw new UnauthorizedAccessException("User signed key validation failed");
+//            }
         }
     }
 
