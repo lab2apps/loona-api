@@ -31,6 +31,10 @@ public class UserService {
         }
     }
 
+    public User getUserById(String userId) {
+        return userRepository.findUserById(userId);
+    }
+
     public boolean isUserExist(String userId) {
         return userRepository.existsById(userId);
     }

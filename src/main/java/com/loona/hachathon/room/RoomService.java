@@ -3,7 +3,9 @@ package com.loona.hachathon.room;
 import com.loona.hachathon.exception.ResourceNotFoundException;
 import com.loona.hachathon.space.Space;
 import com.loona.hachathon.space.SpaceService;
+import com.loona.hachathon.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,9 @@ public class RoomService {
 
     @Autowired
     private SpaceService spaceService;
+
+    @Autowired
+    private UserService userService;
 
     public List<Room> getRooms() {
         return roomRepository.findAll();
@@ -54,5 +59,9 @@ public class RoomService {
         } else {
             roomRepository.deleteById(roomId);
         }
+    }
+
+    private String getCurrentUserId() {
+        return SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
     }
 }

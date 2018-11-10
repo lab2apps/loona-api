@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.web.cors.CorsUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -33,6 +34,14 @@ public class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+        response.addHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.addHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
+        response.addHeader("Access-Control-Allow-Methods", request.getHeader("Access-Control-Request-Method"));
+        if (CorsUtils.isPreFlightRequest(request)) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return null;
+        }
+
         String token = request.getHeader("X-JWT");
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(null, token);
         return getAuthenticationManager().authenticate(authenticationToken);

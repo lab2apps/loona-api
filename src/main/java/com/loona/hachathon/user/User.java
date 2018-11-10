@@ -1,9 +1,10 @@
 package com.loona.hachathon.user;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.loona.hachathon.room.Room;
+import com.loona.hachathon.space.Space;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "vk_user")
@@ -30,6 +31,9 @@ public class User {
 
     @Column(name = "signedId")
     private String signedId;
+
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "vkUser")
+    private List<Space> spaces;
 
     public String getId() {
         return id;
@@ -85,5 +89,13 @@ public class User {
 
     public void setSignedId(String signedId) {
         this.signedId = signedId;
+    }
+
+    public List<Space> getSpaces() {
+        return spaces;
+    }
+
+    public void setSpaces(List<Space> spaces) {
+        this.spaces = spaces;
     }
 }
