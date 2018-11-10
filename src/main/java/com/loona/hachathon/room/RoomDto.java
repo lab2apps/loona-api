@@ -1,5 +1,6 @@
 package com.loona.hachathon.room;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class RoomDto {
@@ -18,9 +19,9 @@ public class RoomDto {
 
     private int price;
 
-    private int startWorkTime;
+    private LocalDateTime startWorkTime;
 
-    private int endWorkTime;
+    private LocalDateTime endWorkTime;
 
     public String getSpaceId() {
         return spaceId;
@@ -78,19 +79,19 @@ public class RoomDto {
         this.price = price;
     }
 
-    public int getStartWorkTime() {
+    public LocalDateTime getStartWorkTime() {
         return startWorkTime;
     }
 
-    public void setStartWorkTime(int startWorkTime) {
+    public void setStartWorkTime(LocalDateTime startWorkTime) {
         this.startWorkTime = startWorkTime;
     }
 
-    public int getEndWorkTime() {
+    public LocalDateTime getEndWorkTime() {
         return endWorkTime;
     }
 
-    public void setEndWorkTime(int endWorkTime) {
+    public void setEndWorkTime(LocalDateTime endWorkTime) {
         this.endWorkTime = endWorkTime;
     }
 }

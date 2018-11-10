@@ -29,6 +29,8 @@ dependencies {
 	runtime 'io.jsonwebtoken:jjwt-impl:0.10.5'
 	runtime 'io.jsonwebtoken:jjwt-jackson:0.10.5'
 	compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 	compile group: 'com.google.guava', name: 'guava', version: '27.0-jre'
 	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
 	implementation('org.springframework.boot:spring-boot-starter-security')

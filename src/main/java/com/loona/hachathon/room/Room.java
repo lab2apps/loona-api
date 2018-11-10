@@ -6,6 +6,7 @@ import com.loona.hachathon.util.CsvAttributeConverter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -38,10 +39,10 @@ public class Room {
     private int price;
 
     @Column(name = "start_work_time")
-    private int startWorkTime;
+    private LocalDateTime startWorkTime;
 
     @Column(name = "end_work_time")
-    private int endWorkTime;
+    private LocalDateTime endWorkTime;
 
     @ManyToOne
     @JoinColumn(name="space_uuid")
@@ -115,19 +116,19 @@ public class Room {
         this.roomSpace = roomSpace;
     }
 
-    public int getStartWorkTime() {
+    public LocalDateTime getStartWorkTime() {
         return startWorkTime;
     }
 
-    public void setStartWorkTime(int startWorkTime) {
+    public void setStartWorkTime(LocalDateTime startWorkTime) {
         this.startWorkTime = startWorkTime;
     }
 
-    public int getEndWorkTime() {
+    public LocalDateTime getEndWorkTime() {
         return endWorkTime;
     }
 
-    public void setEndWorkTime(int endWorkTime) {
+    public void setEndWorkTime(LocalDateTime endWorkTime) {
         this.endWorkTime = endWorkTime;
     }
 

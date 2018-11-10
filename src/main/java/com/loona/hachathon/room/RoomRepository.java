@@ -1,6 +1,5 @@
 package com.loona.hachathon.room;
 
-import com.loona.hachathon.space.Space;
 import com.loona.hachathon.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
