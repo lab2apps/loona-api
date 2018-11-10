@@ -13,17 +13,17 @@ public class SpaceController {
     private SpaceService spaceService;
 
     @GetMapping("/spaces")
-    public List<Space> getSpaces() {
+    public List<SpaceResponseDto> getSpaces() {
         return spaceService.getSpaces();
     }
 
     @GetMapping("/spaces/my")
-    public List<Space> getMySpaces() {
+    public List<SpaceResponseDto> getMySpaces() {
         return spaceService.getMySpaces();
     }
 
     @GetMapping("/space/{id}")
-    public Space getSpaces(@PathVariable(value = "id", required = false) String id) {
+    public SpaceResponseDto getSpaces(@PathVariable(value = "id", required = false) String id) {
         return spaceService.getSpace(id);
     }
 

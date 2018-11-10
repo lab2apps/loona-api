@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,24 +20,34 @@ public class SpaceService {
     @Autowired
     private UserService userService;
 
-    public List<Space> getSpaces() {
-        return spaceRepository.findAll();
+    public List<SpaceResponseDto> getSpaces() {
+        String currentUserId = getCurrentUserId();
+        List<SpaceResponseDto> spaceDto = new ArrayList<>();
+        spaceRepository.findAll().forEach(it -> {
+            spaceDto.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId)));
+        });
+        return spaceDto;
     }
 
-    public Space getSpace(String spaceId) {
+    public SpaceResponseDto getSpace(String spaceId) {
+        String currentUserId = getCurrentUserId();
         Space space = spaceRepository.findSpaceByUuid(spaceId);
         if (space == null)
             throw new ResourceNotFoundException();
         else
-            return space;
+            return SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId));
 
     }
 
-    public List<Space> getMySpaces() {
+    public List<SpaceResponseDto> getMySpaces() {
         String currentUserId = getCurrentUserId();
         User currentUser = userService.getUserById(currentUserId);
         if (currentUser != null) {
-            return spaceRepository.findByVkUser(currentUser);
+            List<SpaceResponseDto> spaceDto = new ArrayList<>();
+            spaceRepository.findByVkUser(currentUser).forEach(it -> {
+                spaceDto.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId)));
+            });
+            return spaceDto;
         } else {
             throw new BadRequestException();
         }

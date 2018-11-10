@@ -1,5 +1,8 @@
 package com.loona.hachathon.space;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class SpaceConverter {
 
     public static Space convert(SpaceDto spaceDto) {
@@ -16,6 +19,26 @@ public class SpaceConverter {
         space.setEndWorkTime(spaceDto.getEndWorkTime());
 
         return space;
+    }
+
+    public static SpaceResponseDto convert(Space space, boolean isMySpace) {
+        SpaceResponseDto result = new SpaceResponseDto();
+        result.setUuid(space.getUuid());
+        result.setName(space.getName());
+        if (space.getImageUrls() == null) {
+            result.setImageUrls(Collections.emptyList());
+        } else
+            result.setImageUrls(Arrays.asList(space.getImageUrls().split(",")));
+        result.setType(space.getType());
+        result.setDescription(space.getDescription());
+        result.setAddress(space.getAddress());
+        result.setPhone(space.getPhone());
+        result.setVkLink(space.getVkLink());
+        result.setWorkDays(space.getWorkDays());
+        result.setStartWorkTime(space.getStartWorkTime());
+        result.setEndWorkTime(space.getEndWorkTime());
+        result.setMySpace(isMySpace);
+        return result;
     }
 
     public static Space merge(Space originSpace, Space newSpace) {
