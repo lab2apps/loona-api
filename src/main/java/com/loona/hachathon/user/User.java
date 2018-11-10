@@ -35,6 +35,9 @@ public class User {
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "vkUser")
     private List<Space> spaces;
 
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "vkUser")
+    private List<Room> rooms;
+
     public String getId() {
         return id;
     }
@@ -97,5 +100,13 @@ public class User {
 
     public void setSpaces(List<Space> spaces) {
         this.spaces = spaces;
+    }
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
 }

@@ -47,12 +47,7 @@ public class SpaceService {
         if (space == null) {
             throw new ResourceNotFoundException();
         } else {
-            String currentUserId = getCurrentUserId();
-            if (userService.isUserExist(currentUserId) && space.getVkUser().getId().equals(currentUserId)) {
-                spaceRepository.save(SpaceConverter.merge(space, updatedSpace));
-            } else {
-                throw new BadRequestException();
-            }
+            spaceRepository.save(SpaceConverter.merge(space, updatedSpace));
         }
     }
 

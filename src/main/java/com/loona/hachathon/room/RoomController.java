@@ -1,5 +1,6 @@
 package com.loona.hachathon.room;
 
+import com.loona.hachathon.space.Space;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,11 @@ public class RoomController {
     @GetMapping("/rooms")
     public List<Room> getRooms() {
         return roomService.getRooms();
+    }
+
+    @GetMapping("/rooms/my")
+    public List<Room> getMyRooms() {
+        return roomService.getMyRooms();
     }
 
     @GetMapping("/room/{id}")

@@ -18,6 +18,11 @@ public class SpaceController {
         return spaceService.getSpaces();
     }
 
+    @GetMapping("/spaces/my")
+    public List<Space> getMySpaces() {
+        return spaceService.getMySpaces();
+    }
+
     @GetMapping("/space/{id}")
     public Space getSpaces(@PathVariable(value = "id", required = false) String id) {
         return spaceService.getSpace(id);

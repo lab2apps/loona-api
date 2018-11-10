@@ -1,6 +1,7 @@
 package com.loona.hachathon.room;
 
 import com.loona.hachathon.space.Space;
+import com.loona.hachathon.user.User;
 import com.loona.hachathon.util.CsvAttributeConverter;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -45,6 +46,10 @@ public class Room {
     @ManyToOne
     @JoinColumn(name="space_uuid")
     private Space roomSpace;
+
+    @ManyToOne
+    @JoinColumn(name="vk_user_id")
+    private User vkUser;
 
     public String getUuid() {
         return uuid;
@@ -124,5 +129,13 @@ public class Room {
 
     public void setEndWorkTime(int endWorkTime) {
         this.endWorkTime = endWorkTime;
+    }
+
+    public User getVkUser() {
+        return vkUser;
+    }
+
+    public void setVkUser(User vkUser) {
+        this.vkUser = vkUser;
     }
 }
