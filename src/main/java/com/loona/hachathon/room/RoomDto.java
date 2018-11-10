@@ -19,7 +19,7 @@ public class RoomDto {
 
     private String floor;
 
-    private int footage;
+    private String footage;
 
     private String rentType;
 
@@ -85,11 +85,11 @@ public class RoomDto {
         this.floor = floor;
     }
 
-    public int getFootage() {
+    public String getFootage() {
         return footage;
     }
 
-    public void setFootage(int footage) {
+    public void setFootage(String footage) {
         this.footage = footage;
     }
 

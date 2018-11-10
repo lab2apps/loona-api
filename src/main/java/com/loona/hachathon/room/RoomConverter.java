@@ -14,7 +14,9 @@ public class RoomConverter {
         room.setImageUrls(roomDto.getImageUrls());
         room.setDescription(roomDto.getDescription());
         room.setFloor(roomDto.getFloor());
-        room.setFootage(roomDto.getFootage());
+        if (roomDto.getFootage() != null && !roomDto.getFootage().isEmpty()) {
+            room.setFootage(Integer.valueOf(roomDto.getFootage()));
+        }
         room.setRentType(roomDto.getRentType());
         room.setPrice(roomDto.getPrice());
         room.setBookingType(roomDto.getBookingType());
