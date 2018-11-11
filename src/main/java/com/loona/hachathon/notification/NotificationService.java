@@ -103,7 +103,7 @@ public class NotificationService {
                     .append("https://api.vk.com/method/notifications.sendMessage")
                     .append("?user_ids=").append(userId)
                     .append("&message=").append(message)
-                    .append("&fragment=").append("notifications")
+                    .append("&fragment=").append("#notifications")
                     .append("&access_token=").append(serviceKey)
                     .append("&v=").append(apiVersion);
 
