@@ -11,6 +11,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -110,7 +111,7 @@ public class RoomSearchRepository {
             room.setFootage(String.valueOf(rs.getInt(5)));
             room.setImageUrls(rs.getString(6));
             room.setName(rs.getString(7));
-            room.setOptions(csvAttributeConverter.convertToEntityAttribute(rs.getString(8)));
+            room.setOptions(new ArrayList<>(csvAttributeConverter.convertToEntityAttribute(rs.getString(8))));
             room.setPrice(rs.getInt(9));
             room.setRentType(rs.getString(10));
             room.setRoomType(rs.getString(11));

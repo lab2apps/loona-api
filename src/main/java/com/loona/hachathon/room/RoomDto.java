@@ -1,5 +1,6 @@
 package com.loona.hachathon.room;
 
+import java.util.List;
 import java.util.Set;
 
 public class RoomDto {
@@ -26,7 +27,7 @@ public class RoomDto {
 
     private String bookingType;
 
-    private Set<String> options;
+    private List<String> options;
 
     public String getUuid() {
         return uuid;
@@ -116,11 +117,11 @@ public class RoomDto {
         this.bookingType = bookingType;
     }
 
-    public Set<String> getOptions() {
+    public List<String> getOptions() {
         return options;
     }
 
-    public void setOptions(Set<String> options) {
+    public void setOptions(List<String> options) {
         this.options = options;
     }
 }

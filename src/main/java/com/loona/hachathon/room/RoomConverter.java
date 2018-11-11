@@ -2,6 +2,7 @@ package com.loona.hachathon.room;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 
 public class RoomConverter {
 
@@ -21,7 +22,7 @@ public class RoomConverter {
         room.setRentType(roomDto.getRentType());
         room.setPrice(roomDto.getPrice());
         room.setBookingType(roomDto.getBookingType());
-        room.setOptions(roomDto.getOptions());
+        room.setOptions(new HashSet<>(roomDto.getOptions()));
         return room;
     }
 
