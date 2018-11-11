@@ -16,7 +16,7 @@ public class UserSettings {
     @Column(name = "notification_allowed")
     private boolean notificationAllowed;
 
-    @Column(name = "favorite_spaces")
+    @Column(name = "favorite_spaces", length = 512)
     @Convert(converter = CsvAttributeConverter.class)
     private Set<String> favoriteSpaces;
 
