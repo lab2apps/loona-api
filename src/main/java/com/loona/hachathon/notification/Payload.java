@@ -5,6 +5,7 @@ public class Payload {
     private String user;
     private String space;
     private String room;
+    private String message;
 
     public String getUser() {
         return user;
@@ -28,5 +29,13 @@ public class Payload {
 
     public void setRoom(String room) {
         this.room = room;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

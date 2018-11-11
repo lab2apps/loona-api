@@ -8,16 +8,14 @@ import com.loona.hachathon.room.Room;
 import com.loona.hachathon.room.RoomRepository;
 import com.loona.hachathon.space.Space;
 import com.loona.hachathon.space.SpaceRepository;
-import com.loona.hachathon.user.User;
-import com.loona.hachathon.user.UserService;
-import com.loona.hachathon.user.UserSettingsRepository;
+import com.loona.hachathon.user.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -25,6 +23,7 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NotificationService {
@@ -51,6 +50,9 @@ public class NotificationService {
     @Autowired
     private UserSettingsRepository userSettingsRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private RestTemplate restTemplate;
     private ObjectMapper objectMapper;
 
@@ -63,18 +65,27 @@ public class NotificationService {
     public void notifyNewRoomAdded(String spaceId, String roomId) {
         userSettingsRepository.findAll().forEach(it -> {
             if (it.getFavoriteSpaces().contains(spaceId)) {
-                addUserNotifications(it.getId(), spaceId, roomId, "NEW_ROOM_ADDED");
+                addUserNotifications(it.getId(), spaceId, roomId, "NEW_ROOM_ADDED", null);
                 sendNotification(it.getId());
             }
         });
     }
 
     public void notifySpaceOwnerRoomRenter(String userId, String spaceId, String roomId, String rentStatus) {
-        addUserNotifications(userId, spaceId, roomId, rentStatus);
+        addUserNotifications(userId, spaceId, roomId, rentStatus, null);
     }
 
     public void notifyUserRoomRenter(String userId, String spaceId, String roomId, String rentStatus) {
-        addUserNotifications(userId, spaceId, roomId, rentStatus);
+        addUserNotifications(userId, spaceId, roomId, rentStatus, null);
+    }
+
+    public void notifySpaceFollowers(String spaceId, String message) {
+        List<User> users = userRepository.findAll();
+        users.stream().map(it -> userSettingsRepository.findUserSettingsById(it.getId()))
+                .filter(it -> it.getFavoriteSpaces().contains(spaceId))
+                .map(UserSettings::getId)
+                .forEach(it -> addUserNotifications(it, spaceId, null, "MESSAGE_SPACE_FOLLOWERS", message));
+
     }
 
     public void sendNotification(String userId) {
@@ -102,11 +113,11 @@ public class NotificationService {
         }
     }
 
-    private void addUserNotifications(String userId, String spaceId, String roomId, String type) {
+    private void addUserNotifications(String userId, String spaceId, String roomId, String type, String message) {
         User currentUser = userService.getUserById(userId);
         if (currentUser != null) {
             Notifications notifications = new Notifications();
-            notifications.setPayload(getPayload(userId, spaceId, roomId));
+            notifications.setPayload(getPayload(userId, spaceId, roomId, message));
             notifications.setType(type);
             notifications.setTimestamp(LocalDateTime.now());
             notifications.setVkUser(currentUser);
@@ -117,8 +128,9 @@ public class NotificationService {
         }
     }
 
-    private String getPayload(String userId, String spaceId, String roomId) {
+    private String getPayload(String userId, String spaceId, String roomId, String message) {
         Payload payload = new Payload();
+        payload.setMessage(message);
         try {
             Room room = roomRepository.findRoomByUuid(roomId);
             if (room != null) {

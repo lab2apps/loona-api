@@ -46,7 +46,8 @@ public class SpaceService {
         String currentUserId = getCurrentUserId();
         List<SpaceResponseDto> spaceDto = new ArrayList<>();
         spaceRepository.findAll().forEach(it -> {
-            spaceDto.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(it.getUuid())));
+            spaceDto.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId),
+                    orderService.isRentSpace(it.getUuid()), it.getVkUser().getId()));
         });
         return spaceDto;
     }
@@ -58,7 +59,8 @@ public class SpaceService {
             logger.warn("getSpaceDto space {} not found", spaceId);
             throw new ResourceNotFoundException();
         } else
-            return SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(space.getUuid()));
+            return SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId),
+                    orderService.isRentSpace(space.getUuid()), space.getVkUser().getId());
 
     }
 
@@ -78,12 +80,14 @@ public class SpaceService {
         if (currentUser != null) {
             List<SpaceResponseDto> spaceDto = new ArrayList<>();
             spaceRepository.findByVkUser(currentUser).forEach(it -> {
-                spaceDto.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(it.getUuid())));
+                spaceDto.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(it.getUuid()),
+                        it.getVkUser().getId()));
             });
             UserSettings userSettings = userSettingsRepository.findUserSettingsById(currentUserId);
             userSettings.getFavoriteSpaces().forEach(it -> {
                 Space space = spaceRepository.findSpaceByUuid(it);
-                spaceDto.add(SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(space.getUuid())));
+                spaceDto.add(SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(space.getUuid()),
+                        space.getVkUser().getId()));
             });
             return spaceDto;
         } else {

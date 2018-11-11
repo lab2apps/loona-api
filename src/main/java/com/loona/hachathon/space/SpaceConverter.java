@@ -25,7 +25,7 @@ public class SpaceConverter {
         return space;
     }
 
-    public static SpaceResponseDto convert(Space space, boolean isMySpace, boolean isMyRent) {
+    public static SpaceResponseDto convert(Space space, boolean isMySpace, boolean isMyRent, String userId) {
         SpaceResponseDto result = new SpaceResponseDto();
         result.setUuid(space.getUuid());
         result.setName(space.getName());
@@ -45,6 +45,7 @@ public class SpaceConverter {
         result.setLongitude(space.getLongitude());
         result.setMySpace(isMySpace);
         result.setMyRent(isMyRent);
+        result.setUserId(userId);
         return result;
     }
 

@@ -20,6 +20,7 @@ public class SpaceResponseDto {
     private Double longitude;
     private boolean mySpace;
     private boolean myRent;
+    private String userId;
 
     public String getUuid() {
         return uuid;
@@ -139,5 +140,13 @@ public class SpaceResponseDto {
 
     public void setMyRent(boolean myRent) {
         this.myRent = myRent;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

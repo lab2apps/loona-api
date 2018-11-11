@@ -28,7 +28,8 @@ public class SpaceSearchService {
         if (spaceName.isEmpty()) {
             List<SpaceResponseDto> result = new ArrayList<>();
             spaceRepository.findAll().forEach(it -> {
-                result.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(it.getUuid())));
+                result.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(it.getUuid()),
+                        it.getVkUser().getId()));
             });
             return result;
         }
@@ -44,7 +45,7 @@ public class SpaceSearchService {
                 isMySpace = true;
             }
 
-            result.add(SpaceConverter.convert(foundSpace, isMySpace, orderService.isRentSpace(foundSpace.getUuid())));
+            result.add(SpaceConverter.convert(foundSpace, isMySpace, orderService.isRentSpace(foundSpace.getUuid()), foundSpace.getVkUser().getId()));
         }
 
         return result;
