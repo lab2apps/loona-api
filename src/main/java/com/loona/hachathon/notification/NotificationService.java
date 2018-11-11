@@ -66,7 +66,7 @@ public class NotificationService {
         userSettingsRepository.findAll().forEach(it -> {
             if (it.getFavoriteSpaces().contains(spaceId)) {
                 addUserNotifications(it.getId(), spaceId, roomId, "NEW_ROOM_ADDED", null);
-                sendNotification(it.getId());
+                sendNotification(it.getId(), spaceId, "NEW_ROOM_ADDED");
             }
         });
     }
@@ -88,15 +88,22 @@ public class NotificationService {
 
     }
 
-    public void sendNotification(String userId) {
+    public void sendNotification(String userId, String spaceId, String type) {
         if (isNotificationsAllowed(userId)) {
+            String message;
+            if (type.equals("NEW_ROOM_ADDED") || type.equals("MESSAGE_SPACE_FOLLOWERS")) {
+                Space space = spaceRepository.findSpaceByUuid(spaceId);
+                message = "Вам поступило уведомление от площадки " + space.getName();
+            } else {
+                message = "Статус вашей брони изменене";
+            }
+
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.vk.com/method/notifications.sendMessage")
                     .queryParam("user_ids", userId)
-                    .queryParam("message", "Test notification example")
+                    .queryParam("message", message)
                     .queryParam("fragment", "/notifications")
                     .queryParam("access_token", serviceKey)
                     .queryParam("v", apiVersion);
-
 
 //            restTemplate.getForEntity(builder.toUriString(), String.class); //TODO:: FIX
         }
@@ -122,6 +129,7 @@ public class NotificationService {
             notifications.setTimestamp(LocalDateTime.now());
             notifications.setVkUser(currentUser);
             notificationRepository.save(notifications);
+            sendNotification(currentUser.getId(), spaceId, type);
         } else {
             logger.warn("addUserNotifications user {} not found", userId);
             throw new BadRequestException();
