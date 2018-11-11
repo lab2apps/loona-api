@@ -91,8 +91,10 @@ public class SpaceService {
             UserSettings userSettings = userSettingsRepository.findUserSettingsById(currentUserId);
             userSettings.getFavoriteSpaces().forEach(it -> {
                 Space space = spaceRepository.findSpaceByUuid(it);
-                spaceDto.add(SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(space.getUuid()),
-                        space.getVkUser().getId()));
+                if (space != null) {
+                    spaceDto.add(SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(space.getUuid()),
+                            space.getVkUser().getId()));
+                }
             });
             return spaceDto;
         } else {
