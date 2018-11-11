@@ -4,6 +4,8 @@ import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import com.loona.hachathon.exception.InternalServerErrorException;
 import com.loona.hachathon.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -20,6 +22,8 @@ import java.util.Date;
 
 @Service
 public class ImageService {
+
+    private static Logger logger = LoggerFactory.getLogger(ImageService.class);
 
     private final Path rootLocation;
 
@@ -38,12 +42,14 @@ public class ImageService {
 
     public String saveImage(MultipartFile image) {
         try {
+            logger.info("Start uploading image {}", image.getOriginalFilename());
             String imageUrl = Hashing.sha1().hashString(image.getOriginalFilename() + new Date().toString(), Charsets.UTF_8).toString();
             if (!Files.exists(rootLocation)) {
                 Files.createDirectories(rootLocation);
             }
 
             Files.copy(image.getInputStream(), rootLocation.resolve(imageUrl));
+            logger.info("Finish uploading image {}", image.getOriginalFilename());
             return imageUrl;
         } catch (IOException e) {
             e.printStackTrace();

@@ -2,8 +2,8 @@ spring:
   jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
   servlet:
     multipart:
-      max-file-size: 30MB
-      max-request-size: 30MB
+      max-file-size: 100MB
+      max-request-size: 100MB
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/example?charSet=UTF8}
     driver-class-name: org.postgresql.Driver
