@@ -20,6 +20,7 @@ public class SpaceResponseDto {
     private Double longitude;
     private boolean mySpace;
     private boolean myRent;
+    private boolean myLike;
     private String userId;
 
     public String getUuid() {
@@ -140,6 +141,14 @@ public class SpaceResponseDto {
 
     public void setMyRent(boolean myRent) {
         this.myRent = myRent;
+    }
+
+    public boolean isMyLike() {
+        return myLike;
+    }
+
+    public void setMyLike(boolean myLike) {
+        this.myLike = myLike;
     }
 
     public String getUserId() {

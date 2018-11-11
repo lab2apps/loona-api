@@ -71,11 +71,7 @@ public class NotificationService {
         });
     }
 
-    public void notifySpaceOwnerRoomRenter(String userId, String spaceId, String roomId, String rentStatus) {
-        addUserNotifications(userId, spaceId, roomId, rentStatus, null);
-    }
-
-    public void notifyUserRoomRenter(String userId, String spaceId, String roomId, String rentStatus) {
+    public void notifyRoomRenter(String userId, String spaceId, String roomId, String rentStatus) {
         addUserNotifications(userId, spaceId, roomId, rentStatus, null);
     }
 
@@ -105,7 +101,7 @@ public class NotificationService {
                     .queryParam("access_token", serviceKey)
                     .queryParam("v", apiVersion);
 
-//            restTemplate.getForEntity(builder.toUriString(), String.class); //TODO:: FIX
+            restTemplate.getForEntity(builder.toUriString(), String.class);
         }
     }
 

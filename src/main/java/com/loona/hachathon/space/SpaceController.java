@@ -47,8 +47,8 @@ public class SpaceController {
     }
 
 
-    @GetMapping("/space/{id}/favorite")
-    public void addSpacesToFavorite(@PathVariable(value = "id", required = false) String id) {
+    @PostMapping("/space/{id}/favorite")
+    public void addSpacesToFavorite(@PathVariable(value = "id") String id) {
         userService.addSpacesToFavorite(id);
     }
 

@@ -69,9 +69,9 @@ public class OrderService {
             orderRepository.save(order);
 
             userService.addSpacesToFavorite(room.getRoomSpace().getUuid());
-            notificationService.notifyUserRoomRenter(getCurrentUserId(), room.getRoomSpace().getUuid(), room.getUuid(),
+            notificationService.notifyRoomRenter(getCurrentUserId(), room.getRoomSpace().getUuid(), room.getUuid(),
                     "USER_ORDER_CREATED");
-            notificationService.notifySpaceOwnerRoomRenter(room.getVkUser().getId(), room.getRoomSpace().getUuid(), room.getUuid(),
+            notificationService.notifyRoomRenter(room.getVkUser().getId(), room.getRoomSpace().getUuid(), room.getUuid(),
                     "OWNER_ORDER_CREATED");
             OrderVerifiedDto dto = new OrderVerifiedDto();
             dto.setOrderId(order.getUuid());
@@ -112,9 +112,9 @@ public class OrderService {
             order.setStatus(2);
             orderRepository.save(order);
             Room room = order.getOrderedRoom();
-            notificationService.notifyUserRoomRenter(getCurrentUserId(), room.getRoomSpace().getUuid(),
+            notificationService.notifyRoomRenter(getCurrentUserId(), room.getRoomSpace().getUuid(),
                     room.getUuid(), "USER_ORDER_PAYED");
-            notificationService.notifySpaceOwnerRoomRenter(room.getVkUser().getId(), room.getRoomSpace().getUuid(), room.getUuid(),
+            notificationService.notifyRoomRenter(room.getVkUser().getId(), room.getRoomSpace().getUuid(), room.getUuid(),
                     "OWNER_ORDER_PAYED");
         } else {
             logger.warn("submitOrder order {} not found", orderId);
@@ -128,9 +128,9 @@ public class OrderService {
             order.setStatus(3);
             orderRepository.save(order);
             Room room = order.getOrderedRoom();
-            notificationService.notifyUserRoomRenter(getCurrentUserId(), room.getRoomSpace().getUuid(),
+            notificationService.notifyRoomRenter(getCurrentUserId(), room.getRoomSpace().getUuid(),
                     room.getUuid(), "USER_ORDER_FAILED");
-            notificationService.notifySpaceOwnerRoomRenter(room.getVkUser().getId(), room.getRoomSpace().getUuid(), room.getUuid(),
+            notificationService.notifyRoomRenter(room.getVkUser().getId(), room.getRoomSpace().getUuid(), room.getUuid(),
                     "OWNER_ORDER_FAILED");
         } else {
             logger.warn("failOrder order {} not found", orderId);

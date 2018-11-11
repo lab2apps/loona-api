@@ -58,9 +58,14 @@ public class SpaceService {
         if (space == null) {
             logger.warn("getSpaceDto space {} not found", spaceId);
             throw new ResourceNotFoundException();
-        } else
-            return SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId),
+        } else {
+            SpaceResponseDto dto = SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId),
                     orderService.isRentSpace(space.getUuid()), space.getVkUser().getId());
+            UserSettings userSettings = userSettingsRepository.findUserSettingsById(currentUserId);
+            dto.setMyLike(userSettings.getFavoriteSpaces().contains(space.getUuid()));
+            return dto;
+        }
+
 
     }
 
