@@ -60,8 +60,24 @@ public class NotificationService {
         objectMapper = new ObjectMapper();
     }
 
+    public void notifyNewRoomAdded(String spaceId, String roomId) {
+        userSettingsRepository.findAll().forEach(it -> {
+            if (it.getFavoriteSpaces().contains(spaceId)) {
+                addUserNotifications(it.getId(), spaceId, roomId, "NEW_ROOM_ADDED");
+                sendNotification(it.getId());
+            }
+        });
+    }
+
+    public void notifySpaceOwnerRoomRenter(String userId, String spaceId, String roomId, String rentStatus) {
+        addUserNotifications(userId, spaceId, roomId, rentStatus);
+    }
+
+    public void notifyUserRoomRenter(String userId, String spaceId, String roomId, String rentStatus) {
+        addUserNotifications(userId, spaceId, roomId, rentStatus);
+    }
+
     public void sendNotification(String userId) {
-        userId = "14783111";
         if (isNotificationsAllowed(userId)) {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.vk.com/method/notifications.sendMessage")
                     .queryParam("user_ids", userId)
@@ -71,7 +87,7 @@ public class NotificationService {
                     .queryParam("v", apiVersion);
 
 
-            restTemplate.getForEntity(builder.toUriString(), String.class);
+//            restTemplate.getForEntity(builder.toUriString(), String.class); //TODO:: FIX
         }
     }
 
@@ -84,16 +100,6 @@ public class NotificationService {
             logger.warn("getUserNotifications user {} not found", currentUserId);
             throw new BadRequestException();
         }
-    }
-
-//    public void notifyNewRoomAdded(String spaceId, String roomId) {
-//
-//    }
-
-    public void notifyNewRoomAdded(String spaceId, String roomId) {
-        userSettingsRepository.findAllByFavoriteSpacesContaining(spaceId).forEach(it -> {
-            addUserNotifications(it.getId(), spaceId, roomId, "NEW_ROOM_ADDED");
-        });
     }
 
     private void addUserNotifications(String userId, String spaceId, String roomId, String type) {

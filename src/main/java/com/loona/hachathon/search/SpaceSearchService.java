@@ -1,5 +1,6 @@
 package com.loona.hachathon.search;
 
+import com.loona.hachathon.order.OrderService;
 import com.loona.hachathon.space.Space;
 import com.loona.hachathon.space.SpaceConverter;
 import com.loona.hachathon.space.SpaceRepository;
@@ -19,12 +20,15 @@ public class SpaceSearchService {
     @Autowired
     private SpaceRepository spaceRepository;
 
+    @Autowired
+    private OrderService orderService;
+
     public List<SpaceResponseDto> search(String spaceName) {
         String currentUserId = getCurrentUserId();
         if (spaceName.isEmpty()) {
             List<SpaceResponseDto> result = new ArrayList<>();
             spaceRepository.findAll().forEach(it -> {
-                result.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId)));
+                result.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(it.getUuid())));
             });
             return result;
         }
@@ -40,7 +44,7 @@ public class SpaceSearchService {
                 isMySpace = true;
             }
 
-            result.add(SpaceConverter.convert(foundSpace, isMySpace));
+            result.add(SpaceConverter.convert(foundSpace, isMySpace, orderService.isRentSpace(foundSpace.getUuid())));
         }
 
         return result;

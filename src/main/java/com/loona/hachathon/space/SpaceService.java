@@ -2,9 +2,12 @@ package com.loona.hachathon.space;
 
 import com.loona.hachathon.exception.BadRequestException;
 import com.loona.hachathon.exception.ResourceNotFoundException;
+import com.loona.hachathon.order.OrderService;
 import com.loona.hachathon.room.RoomService;
 import com.loona.hachathon.user.User;
 import com.loona.hachathon.user.UserService;
+import com.loona.hachathon.user.UserSettings;
+import com.loona.hachathon.user.UserSettingsRepository;
 import com.loona.hachathon.util.AddressResolver;
 import com.loona.hachathon.util.LatLongDto;
 import org.slf4j.Logger;
@@ -31,13 +34,19 @@ public class SpaceService {
     private UserService userService;
 
     @Autowired
+    private UserSettingsRepository userSettingsRepository;
+
+    @Autowired
     private AddressResolver addressResolver;
+
+    @Autowired
+    private OrderService orderService;
 
     public List<SpaceResponseDto> getSpaces() {
         String currentUserId = getCurrentUserId();
         List<SpaceResponseDto> spaceDto = new ArrayList<>();
         spaceRepository.findAll().forEach(it -> {
-            spaceDto.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId)));
+            spaceDto.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(it.getUuid())));
         });
         return spaceDto;
     }
@@ -49,7 +58,7 @@ public class SpaceService {
             logger.warn("getSpaceDto space {} not found", spaceId);
             throw new ResourceNotFoundException();
         } else
-            return SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId));
+            return SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(space.getUuid()));
 
     }
 
@@ -69,7 +78,12 @@ public class SpaceService {
         if (currentUser != null) {
             List<SpaceResponseDto> spaceDto = new ArrayList<>();
             spaceRepository.findByVkUser(currentUser).forEach(it -> {
-                spaceDto.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId)));
+                spaceDto.add(SpaceConverter.convert(it, it.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(it.getUuid())));
+            });
+            UserSettings userSettings = userSettingsRepository.findUserSettingsById(currentUserId);
+            userSettings.getFavoriteSpaces().forEach(it -> {
+                Space space = spaceRepository.findSpaceByUuid(it);
+                spaceDto.add(SpaceConverter.convert(space, space.getVkUser().getId().equals(currentUserId), orderService.isRentSpace(space.getUuid())));
             });
             return spaceDto;
         } else {

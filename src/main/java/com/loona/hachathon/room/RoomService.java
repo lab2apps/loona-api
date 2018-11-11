@@ -2,7 +2,9 @@ package com.loona.hachathon.room;
 
 import com.loona.hachathon.exception.BadRequestException;
 import com.loona.hachathon.exception.ResourceNotFoundException;
+import com.loona.hachathon.notification.NotificationService;
 import com.loona.hachathon.order.OrderRepository;
+import com.loona.hachathon.order.OrderService;
 import com.loona.hachathon.space.Space;
 import com.loona.hachathon.space.SpaceService;
 import com.loona.hachathon.user.User;
@@ -33,19 +35,25 @@ public class RoomService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private NotificationService notificationService;
+
     public List<RoomResponseDto> getRooms(String spaceId) {
         String currentUserId = getCurrentUserId();
         if (spaceId == null) {
             List<RoomResponseDto> roomDto = new ArrayList<>();
             roomRepository.findAll().forEach(it -> {
-                roomDto.add(RoomConverter.convert(it, it.getVkUser().getId().equals(currentUserId)));
+                roomDto.add(RoomConverter.convert(it, it.getVkUser().getId().equals(currentUserId), orderService.isRentRoom(it.getUuid())));
             });
             return roomDto;
         } else {
             Space space = spaceService.getSpace(spaceId);
             List<RoomResponseDto> roomDto = new ArrayList<>();
             space.getRooms().forEach(it -> {
-                roomDto.add(RoomConverter.convert(it, it.getVkUser().getId().equals(currentUserId)));
+                roomDto.add(RoomConverter.convert(it, it.getVkUser().getId().equals(currentUserId), orderService.isRentRoom(it.getUuid())));
             });
             return roomDto;
         }
@@ -79,7 +87,7 @@ public class RoomService {
             logger.warn("getRoomDto room {} not found", roomId);
             throw new ResourceNotFoundException();
         } else {
-            return RoomConverter.convert(room, room.getVkUser().getId().equals(currentUserId));
+            return RoomConverter.convert(room, room.getVkUser().getId().equals(currentUserId), orderService.isRentRoom(room.getUuid()));
         }
     }
 
@@ -91,6 +99,7 @@ public class RoomService {
         room.setRoomSpace(space);
         room.setVkUser(currentUser);
         roomRepository.save(room);
+        notificationService.notifyNewRoomAdded(space.getUuid(), room.getUuid());
     }
 
     public void updateRoom(String roomId, RoomDto roomDto) {

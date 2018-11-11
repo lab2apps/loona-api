@@ -14,7 +14,7 @@ public class CsvAttributeConverter implements AttributeConverter<Set<String>, St
     @Override
     public Set<String> convertToEntityAttribute(String dbData) {
         if (dbData == null) {
-            return Collections.emptySet();
+            return new HashSet<>();
         } else return new HashSet<>(Arrays.asList(dbData.split(",")));
     }
 }

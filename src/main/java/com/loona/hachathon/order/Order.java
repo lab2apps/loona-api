@@ -35,6 +35,9 @@ public class Order {
     @Column(name = "end_rent_time")
     private LocalDateTime endRentTime;
 
+    @Column(name = "timestamp")
+    private LocalDateTime timestamp;
+
     @ManyToOne
     @JoinColumn(name="room_id")
     private Room orderedRoom;
@@ -97,6 +100,14 @@ public class Order {
 
     public void setEndRentTime(LocalDateTime endRentTime) {
         this.endRentTime = endRentTime;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     public Room getOrderedRoom() {

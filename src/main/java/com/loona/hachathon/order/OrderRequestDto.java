@@ -1,12 +1,13 @@
 package com.loona.hachathon.order;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class OrderRequestDto {
 
     private String roomId;
-    private LocalDateTime startRentTime;
-    private LocalDateTime endRentTime;
+    private Date startRentTime;
+    private Date endRentTime;
 
     public String getRoomId() {
         return roomId;
@@ -16,19 +17,19 @@ public class OrderRequestDto {
         this.roomId = roomId;
     }
 
-    public LocalDateTime getStartRentTime() {
+    public Date getStartRentTime() {
         return startRentTime;
     }
 
-    public void setStartRentTime(LocalDateTime startRentTime) {
+    public void setStartRentTime(Date startRentTime) {
         this.startRentTime = startRentTime;
     }
 
-    public LocalDateTime getEndRentTime() {
+    public Date getEndRentTime() {
         return endRentTime;
     }
 
-    public void setEndRentTime(LocalDateTime endRentTime) {
+    public void setEndRentTime(Date endRentTime) {
         this.endRentTime = endRentTime;
     }
 }

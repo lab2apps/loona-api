@@ -25,7 +25,7 @@ public class RoomConverter {
         return room;
     }
 
-    public static RoomResponseDto convert(Room room, boolean mySpace) {
+    public static RoomResponseDto convert(Room room, boolean mySpace, boolean myRent) {
         RoomResponseDto dto = new RoomResponseDto();
         dto.setUuid(room.getUuid());
         dto.setName(room.getName());
@@ -42,6 +42,7 @@ public class RoomConverter {
         dto.setBookingType(room.getBookingType());
         dto.setOptions(room.getOptions());
         dto.setMySpace(mySpace);
+        dto.setMyRent(myRent);
         return dto;
     }
 

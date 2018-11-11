@@ -16,7 +16,7 @@ public class Notifications {
     @Column(name = "uuid", unique = true)
     private String uuid;
 
-    @Column(name = "payload")
+    @Column(name = "payload", length = 2048)
     private String payload;
 
     @Column(name = "type")

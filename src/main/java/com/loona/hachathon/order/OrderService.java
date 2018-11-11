@@ -1,6 +1,7 @@
 package com.loona.hachathon.order;
 
 import com.loona.hachathon.exception.BadRequestException;
+import com.loona.hachathon.notification.NotificationService;
 import com.loona.hachathon.room.Room;
 import com.loona.hachathon.room.RoomService;
 import com.loona.hachathon.user.User;
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -34,33 +37,42 @@ public class OrderService {
     @Autowired
     private RoomService roomService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     // 1 Верефицируется 2 Подтвержден 3 Откланен
     //Rent type HOUR DAY
     public OrderVerifiedDto createOrder(OrderRequestDto orderDto) {
         String currentUserId = getCurrentUserId();
         User currentUser = userService.getUserById(currentUserId);
         Room room = roomService.getRoom(orderDto.getRoomId());
-        if (room == null || currentUser == null) {
+        if (room != null && currentUser != null) {
             int rentTime;
-            if (room.getRentType().toLowerCase().equals("day")) {
-                rentTime = orderDto.getEndRentTime().getDayOfYear() - orderDto.getStartRentTime().getDayOfYear();
-            } else {
-                rentTime = orderDto.getEndRentTime().getHour() - orderDto.getStartRentTime().getHour();
-            }
+            LocalDateTime startRentTime = convertToLocalDateTimeViaInstant(orderDto.getStartRentTime());
+            LocalDateTime endRentTime = convertToLocalDateTimeViaInstant(orderDto.getEndRentTime());
+//            if (room.getRentType().toLowerCase().equals("day")) {
+            rentTime = endRentTime.getDayOfYear() - startRentTime.getDayOfYear() + 1;
+//            } else {
+//                rentTime = endRentTime.ge() - startRentTime.getHour();
+//            }
             int price = rentTime * room.getPrice();
             Order order = new Order();
             order.setRentTime(rentTime);
-            order.setStartRentTime(orderDto.getStartRentTime());
-            order.setEndRentTime(orderDto.getEndRentTime());
+            order.setStartRentTime(startRentTime);
+            order.setEndRentTime(endRentTime);
             order.setBookingType(room.getBookingType());
             order.setPrice(price);
             order.setStatus(1);
+            order.setTimestamp(LocalDateTime.now());
             order.setVkUser(currentUser);
             order.setOrderedRoom(room);
             orderRepository.save(order);
 
             userService.addSpacesToFavorite(room.getRoomSpace().getUuid());
-
+            notificationService.notifyUserRoomRenter(getCurrentUserId(), room.getRoomSpace().getUuid(), room.getUuid(),
+                    "USER_ORDER_CREATED");
+            notificationService.notifySpaceOwnerRoomRenter(room.getVkUser().getId(), room.getRoomSpace().getUuid(), room.getUuid(),
+                    "OWNER_ORDER_CREATED");
             OrderVerifiedDto dto = new OrderVerifiedDto();
             dto.setOrderId(order.getUuid());
             dto.setPrice(price);
@@ -72,11 +84,38 @@ public class OrderService {
         }
     }
 
+    public boolean isRentSpace(String spaceId) {
+        String currentUserId = getCurrentUserId();
+        User currentUser = userService.getUserById(currentUserId);
+        return orderRepository.findAllByVkUser(currentUser).stream()
+                .filter(it -> LocalDateTime.now().isBefore(it.getEndRentTime()))
+                .filter(it -> it.getStatus() < 3)
+                .map(it -> it.getOrderedRoom().getRoomSpace().getUuid())
+                .distinct()
+                .collect(Collectors.toSet()).contains(spaceId);
+    }
+
+    public boolean isRentRoom(String roomId) {
+        String currentUserId = getCurrentUserId();
+        User currentUser = userService.getUserById(currentUserId);
+        return orderRepository.findAllByVkUser(currentUser).stream()
+                .filter(it -> LocalDateTime.now().isBefore(it.getEndRentTime()))
+                .filter(it -> it.getStatus() < 3)
+                .map(it -> it.getOrderedRoom().getUuid())
+                .distinct()
+                .collect(Collectors.toSet()).contains(roomId);
+    }
+
     public void submitOrder(String orderId) {
         Order order = orderRepository.findOrderByUuid(orderId);
         if (order != null) {
             order.setStatus(2);
             orderRepository.save(order);
+            Room room = order.getOrderedRoom();
+            notificationService.notifyUserRoomRenter(getCurrentUserId(), room.getRoomSpace().getUuid(),
+                    room.getUuid(), "USER_ORDER_PAYED");
+            notificationService.notifySpaceOwnerRoomRenter(room.getVkUser().getId(), room.getRoomSpace().getUuid(), room.getUuid(),
+                    "OWNER_ORDER_PAYED");
         } else {
             logger.warn("submitOrder order {} not found", orderId);
             throw new BadRequestException();
@@ -88,6 +127,11 @@ public class OrderService {
         if (order != null) {
             order.setStatus(3);
             orderRepository.save(order);
+            Room room = order.getOrderedRoom();
+            notificationService.notifyUserRoomRenter(getCurrentUserId(), room.getRoomSpace().getUuid(),
+                    room.getUuid(), "USER_ORDER_FAILED");
+            notificationService.notifySpaceOwnerRoomRenter(room.getVkUser().getId(), room.getRoomSpace().getUuid(), room.getUuid(),
+                    "OWNER_ORDER_FAILED");
         } else {
             logger.warn("failOrder order {} not found", orderId);
             throw new BadRequestException();
@@ -101,13 +145,15 @@ public class OrderService {
             Month month = fromDate.getMonth();
             Set<LocalDate> bookedDates = new HashSet<>();
             orders.forEach(it -> {
-                LocalDate startTime = it.getStartRentTime().toLocalDate();
-                LocalDate endTime = it.getEndRentTime().toLocalDate();
-                while (!startTime.isAfter(endTime)) {
-                    if (startTime.getMonth().equals(month)) {
-                        bookedDates.add(startTime);
+                if (it.getStatus() == 2 || it.getStatus() == 1) {
+                    LocalDate startTime = it.getStartRentTime().toLocalDate();
+                    LocalDate endTime = it.getEndRentTime().toLocalDate();
+                    while (!startTime.isAfter(endTime)) {
+                        if (startTime.getMonth().equals(month)) {
+                            bookedDates.add(startTime);
+                        }
+                        startTime = startTime.plusDays(1);
                     }
-                    startTime = startTime.plusDays(1);
                 }
             });
             return bookedDates;
@@ -126,6 +172,12 @@ public class OrderService {
             logger.warn("getMyOrders user {} not found", currentUserId);
             throw new BadRequestException();
         }
+    }
+
+    public LocalDateTime convertToLocalDateTimeViaInstant(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
     private String getCurrentUserId() {

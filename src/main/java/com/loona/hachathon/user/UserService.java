@@ -37,12 +37,12 @@ public class UserService {
             throw new UnauthorizedAccessException("Invalid user Id");
         } else {
 //            if (vkUserKeyValidator.isKeyValid(user.getId(), user.getSignedId())) { //TODO:: check validation
-                userRepository.save(user);
-                UserSettings userSettings = new UserSettings();
-                userSettings.setId(user.getId());
-                userSettings.setNotificationAllowed(false);
-                userSettingsRepository.save(userSettings);
-                return false;
+            userRepository.save(user);
+            UserSettings userSettings = new UserSettings();
+            userSettings.setId(user.getId());
+            userSettings.setNotificationAllowed(false);
+            userSettingsRepository.save(userSettings);
+            return false;
 //            } else {
 //                throw new UnauthorizedAccessException("User signed key validation failed");
 //            }

@@ -19,6 +19,7 @@ public class SpaceResponseDto {
     private Double latitude;
     private Double longitude;
     private boolean mySpace;
+    private boolean myRent;
 
     public String getUuid() {
         return uuid;
@@ -130,5 +131,13 @@ public class SpaceResponseDto {
 
     public void setMySpace(boolean mySpace) {
         this.mySpace = mySpace;
+    }
+
+    public boolean isMyRent() {
+        return myRent;
+    }
+
+    public void setMyRent(boolean myRent) {
+        this.myRent = myRent;
     }
 }
