@@ -14,10 +14,10 @@ spring:
       ddl-auto: update
 application:
   groupId: 173753932
-  serviceKey: 2d6f23ba2d6f23ba2d6f23ba982d09d26422d6f2d6f23ba768a529ed28d69072e956677
+  serviceKey: 122717c2122717c2122717c2b61241c9ea11227122717c249f9e4f9c32005119257bd3e
   apiVersion: 5.52
   yandexKey: 74c5a342-8ead-45bf-964e-b94bcce3b472
-  id: 6745176
-  secret: LQFLwAm8zjBzDaQA9MbC
+  id: 6741544
+  secret: x8oGiipfILj2evomsTdE
   storage:
     location: images
