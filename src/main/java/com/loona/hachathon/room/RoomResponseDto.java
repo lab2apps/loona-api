@@ -18,6 +18,7 @@ public class RoomResponseDto {
     private Set<String> options;
     private boolean mySpace;
     private boolean myRent;
+    private String userId;
 
     public String getUuid() {
         return uuid;
@@ -121,5 +122,13 @@ public class RoomResponseDto {
 
     public void setMyRent(boolean myRent) {
         this.myRent = myRent;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

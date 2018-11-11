@@ -32,8 +32,8 @@ public class SpaceController {
     }
 
     @PostMapping("/space")
-    public void createSpace(@RequestBody SpaceDto spaceDto) {
-        spaceService.saveSpace(SpaceConverter.convert(spaceDto));
+    public String createSpace(@RequestBody SpaceDto spaceDto) {
+        return spaceService.saveSpace(SpaceConverter.convert(spaceDto));
     }
 
     @PutMapping("/space/{id}")

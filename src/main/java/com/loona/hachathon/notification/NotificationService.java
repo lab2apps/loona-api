@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loona.hachathon.exception.BadRequestException;
 import com.loona.hachathon.room.Room;
+import com.loona.hachathon.room.RoomConverter;
 import com.loona.hachathon.room.RoomRepository;
 import com.loona.hachathon.space.Space;
+import com.loona.hachathon.space.SpaceConverter;
 import com.loona.hachathon.space.SpaceRepository;
 import com.loona.hachathon.user.*;
 import org.slf4j.Logger;
@@ -17,10 +19,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,17 +96,26 @@ public class NotificationService {
                 Space space = spaceRepository.findSpaceByUuid(spaceId);
                 message = "Вам поступило уведомление от площадки " + space.getName();
             } else {
-                message = "Статус вашей брони изменене";
+                message = "Статус вашей брони изменен";
             }
 
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("https://api.vk.com/method/notifications.sendMessage")
-                    .queryParam("user_ids", userId)
-                    .queryParam("message", message)
-                    .queryParam("fragment", "/notifications")
-                    .queryParam("access_token", serviceKey)
-                    .queryParam("v", apiVersion);
+            StringBuilder uri = new StringBuilder()
+                    .append("https://api.vk.com/method/notifications.sendMessage")
+                    .append("?user_ids=").append(userId)
+                    .append("&message=").append(message)
+                    .append("&fragment=").append("notifications")
+                    .append("&access_token=").append(serviceKey)
+                    .append("&v=").append(apiVersion);
 
-            restTemplate.getForEntity(builder.toUriString(), String.class);
+//                UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl()
+//                        .queryParam("user_ids", userId)
+//                        .queryParam("message", message)
+//                        .queryParam("fragment", "notifications")
+//                        .queryParam("access_token", serviceKey)
+//                        .queryParam("v", apiVersion);
+
+
+                restTemplate.getForEntity(uri.toString(), String.class);
         }
     }
 
@@ -109,7 +123,7 @@ public class NotificationService {
         String currentUserId = getCurrentUserId();
         User currentUser = userService.getUserById(currentUserId);
         if (currentUser != null) {
-            return notificationRepository.findNotificationsByVkUser(currentUser);
+            return notificationRepository.findNotificationsByVkUserOrderByTimestampDesc(currentUser);
         } else {
             logger.warn("getUserNotifications user {} not found", currentUserId);
             throw new BadRequestException();
@@ -138,14 +152,14 @@ public class NotificationService {
         try {
             Room room = roomRepository.findRoomByUuid(roomId);
             if (room != null) {
-                payload.setRoom(objectMapper.writeValueAsString(room));
-                payload.setSpace(objectMapper.writeValueAsString(room.getRoomSpace()));
+                payload.setRoom(objectMapper.writeValueAsString(RoomConverter.convert(room, false, false)));
+                payload.setSpace(objectMapper.writeValueAsString(SpaceConverter.convert(room.getRoomSpace(), false, false, userId)));
                 payload.setUser(objectMapper.writeValueAsString(room.getVkUser()));
                 return objectMapper.writeValueAsString(payload);
             }
             Space space = spaceRepository.findSpaceByUuid(spaceId);
             if (space != null) {
-                payload.setSpace(objectMapper.writeValueAsString(space));
+                payload.setSpace(objectMapper.writeValueAsString(SpaceConverter.convert(space, false, false, userId)));
                 payload.setUser(objectMapper.writeValueAsString(space.getVkUser()));
                 return objectMapper.writeValueAsString(payload);
             }

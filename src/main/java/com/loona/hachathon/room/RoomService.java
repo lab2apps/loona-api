@@ -87,7 +87,9 @@ public class RoomService {
             logger.warn("getRoomDto room {} not found", roomId);
             throw new ResourceNotFoundException();
         } else {
-            return RoomConverter.convert(room, room.getVkUser().getId().equals(currentUserId), orderService.isRentRoom(room.getUuid()));
+            RoomResponseDto dto = RoomConverter.convert(room, room.getVkUser().getId().equals(currentUserId), orderService.isRentRoom(room.getUuid()));
+            dto.setUserId(room.getVkUser().getId());
+            return dto;
         }
     }
 

@@ -122,7 +122,7 @@ public class SpaceService {
         spaceRepository.save(SpaceConverter.merge(space, updatedSpace));
     }
 
-    public void saveSpace(Space space) {
+    public String saveSpace(Space space) {
         String currentUserId = getCurrentUserId();
         User currentUser = userService.getUserById(currentUserId);
 
@@ -141,6 +141,7 @@ public class SpaceService {
         }
 
         spaceRepository.save(space);
+        return space.getUuid();
     }
 
     public void deleteSpace(String spaceId) {
